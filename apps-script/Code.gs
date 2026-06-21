@@ -1,7 +1,7 @@
 const SHEET_NAME = "Form Yanıtları 1";
 const DRIVE_FOLDER_ID = "";
 const SUBMIT_COOLDOWN_SECONDS = 20;
-const ALLOWED_CLASS_CODES = new Set(["75", "75EDO", "75EDRO"]);
+const ALLOWED_CLASS_CODES = new Set(["75", "75EDRO"]);
 
 const HEADERS = [
   "Zaman Damgası",
@@ -16,7 +16,8 @@ const HEADERS = [
   "Üç Kelime",
   "Alıntı",
   "Öneri",
-  "Öğrenci Anahtarı"
+  "Öğrenci Anahtarı",
+  "Sınıf Kodu"
 ];
 
 const ALLOWED_CLASSES = new Set(["5", "6", "7", "8"]);
@@ -43,6 +44,7 @@ function doGet() {
       zaman: stringifyDate_(item["Zaman Damgası"]),
       adSoyad: safeText_(item["Ad Soyad"], 80),
       okulNo: safeText_(item["Okul No"], 16),
+      sinifKodu: safeText_(item["Sınıf Kodu"], 12).toLocaleUpperCase("tr-TR"),
       sinif: safeText_(item["Sınıf"], 2),
       sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
       kitapAdi: safeText_(item["Kitap Adı"], 90),
@@ -92,7 +94,8 @@ function doPost(e) {
       record.ucKelime,
       record.alintiCumle,
       record.onerirMi,
-      record.ogrenciAnahtari
+      record.ogrenciAnahtari,
+      record.sinifKodu
     ]);
 
     return json_({ status: "success" });
