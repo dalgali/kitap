@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Kitap Kurdu | Yaz Okuma Paneli</title>
+    <title>Kitap Kurdu | Yaz Okuma Paneli</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
@@ -24,10 +23,10 @@
         <div class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-300 opacity-20 rounded-full blur-xl"></div>
         <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-pink-400 opacity-20 rounded-full blur-xl"></div>
         <h1 class="text-3xl md:text-5xl font-bold tracking-wide drop-shadow-md flex justify-center items-center gap-3">
-            🚀 Kitap Kurdu Dünyası ✨
+            Kitap Kurdu Dünyası
         </h1>
         <p class="text-xs md:text-base text-indigo-100 mt-2 tracking-wider">
-            Bu yaz okuduğun kitapları paylaş, arkadaşlarına ilham ol! 📚🐛
+            Bu yaz okuduğun kitapları paylaş, arkadaşlarına ilham ol.
         </p>
     </header>
 
@@ -37,18 +36,18 @@
             <form id="readingForm" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-indigo-600 mb-1">🤠 Adın ve Soyadın</label>
+                        <label class="block text-sm font-bold text-indigo-600 mb-1">Adın ve Soyadın</label>
                         <input type="text" id="adSoyad" required maxlength="60" autocomplete="name" placeholder="Örn: Cemal Dalgalı" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-indigo-600 mb-1">🔢 Okul Numaran</label>
+                        <label class="block text-sm font-bold text-indigo-600 mb-1">Okul Numaran</label>
                         <input type="number" id="okulNo" required min="1" max="99999" placeholder="Örn: 482" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-indigo-600 mb-1">🎓 Sınıfın</label>
+                        <label class="block text-sm font-bold text-indigo-600 mb-1">Sınıfın</label>
                         <select id="sinif" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
                             <option value="">Seç..</option>
                             <option value="5">5. Sınıf</option>
@@ -58,7 +57,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-indigo-600 mb-1">🅰️ Şuben</label>
+                        <label class="block text-sm font-bold text-indigo-600 mb-1">Şuben</label>
                         <select id="sube" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
                             <option value="">Seç..</option>
                         </select>
@@ -66,19 +65,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-indigo-600 mb-1">📖 Okuduğun Kitabın Adı</label>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Okuduğun Kitabın Adı</label>
                     <input type="text" id="kitapAdi" required maxlength="90" placeholder="Kitabın adını buraya yazar mısın?" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-indigo-600 mb-1">⭐ Kitaba Puanın Kaç?</label>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Kitaba Puanın Kaç?</label>
                     <div class="flex items-center space-x-3 mt-2 bg-purple-50 p-3 rounded-2xl w-fit border border-purple-100">
                         <div id="starContainer" class="flex text-3xl text-slate-300 cursor-pointer">
-                            <i class="fa-solid fa-star star-btn" data-value="1"></i>
-                            <i class="fa-solid fa-star star-btn ml-1" data-value="2"></i>
-                            <i class="fa-solid fa-star star-btn ml-1" data-value="3"></i>
-                            <i class="fa-solid fa-star star-btn ml-1" data-value="4"></i>
-                            <i class="fa-solid fa-star star-btn ml-1" data-value="5"></i>
+                            <span class="star-btn select-none leading-none" data-value="1">★</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="2">★</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="3">★</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="4">★</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="5">★</span>
                         </div>
                         <span id="puanLabel" class="text-xs font-bold text-purple-600 bg-white px-3 py-1 rounded-full shadow-xs">(Seçmedin)</span>
                     </div>
@@ -86,36 +85,52 @@
 
                 <div class="bg-amber-50 p-4 rounded-2xl border-2 border-dashed border-amber-300 space-y-2">
                     <label class="block text-sm font-bold text-amber-700 flex items-center gap-1.5">
-                        <i class="fa-solid fa-camera text-base animate-pulse"></i> 📸 Okuma Kanıtı Yükle (En Sevdiğin Sayfa/Cümle)
+                        [ + ] Okuma Kanıtı Yükle (En Sevdiğin Sayfa/Cümle)
                     </label>
                     <p class="text-[11px] text-amber-600 font-medium">Yüzün görünmeden, kitaptan en sevdiğin cümlenin veya sayfanın fotoğrafını çekip yükle!</p>
                     <input type="file" id="fotoKanit" accept="image/*" class="w-full text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-amber-100 file:text-amber-700 hover:file:bg-amber-200 cursor-pointer">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-indigo-600 mb-1">💬 Kitap Hakkında Ne Düşünüyorsun?</label>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Kitap Hakkında Ne Düşünüyorsun?</label>
                     <textarea id="yorum" required rows="3" maxlength="500" placeholder="Sence bu kitap nasıldı? En sevdiğin karakter kim oldu? Kısaca bahset..." class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition resize-none"></textarea>
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transition duration-200 text-base shadow-lg hover:shadow-xl transform active:scale-[0.98] cursor-pointer flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i> Kitabımı Listeye Ekle!
+                    + Kitabımı Listeye Ekle
                 </button>
             </form>
         </div>
 
+        <section class="space-y-4">
+            <div class="flex justify-between items-center px-2">
+                <h2 class="text-xl md:text-2xl font-bold text-purple-900 flex items-center gap-2">
+                    ★ İlk 5 Okur
+                </h2>
+                <span class="text-[11px] font-bold text-purple-500 bg-white px-3 py-1.5 rounded-full border border-purple-100 shadow-xs">
+                    okul no + ad soyad
+                </span>
+            </div>
+            <div id="leaderboardContainer" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div class="col-span-full text-center py-6 text-slate-400 font-medium">
+                    Sıralama hazırlanıyor...
+                </div>
+            </div>
+        </section>
+
         <div class="space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xl md:text-2xl font-bold text-purple-900 flex items-center gap-2">
-                    🎉 Canlı Okuma Akışı <span class="animate-pulse text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">CANLI</span>
+                    Canlı Okuma Akışı <span class="animate-pulse text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">CANLI</span>
                 </h2>
                 <button id="refreshBtn" class="text-indigo-600 hover:text-indigo-800 text-sm font-bold bg-white px-3 py-1.5 rounded-full shadow-xs border border-indigo-100 transition flex items-center gap-1 cursor-pointer">
-                    <i class="fa-solid fa-rotate"></i> Yenile
+                    ↻ Yenile
                 </button>
             </div>
             
             <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div id="loadingText" class="col-span-full text-center py-12 text-slate-400 font-medium">
-                    <i class="fa-solid fa-spinner animate-spin text-3xl text-indigo-500 block mb-3"></i>
+                    <span class="animate-pulse text-3xl text-indigo-500 block mb-3">...</span>
                     Kitaplar raflardan indiriliyor, lütfen bekle...
                 </div>
             </div>
@@ -123,7 +138,7 @@
     </main>
 
     <footer class="bg-white border-t border-purple-100 py-4 text-center text-xs font-bold text-purple-400">
-        🎈 Harika Yaz Okuma Serüveni Paneli v3.7
+        © 2026 Cemal Dalgalı. Tüm hakları saklıdır.
     </footer>
 
     <script src="js/profanity-filter.js"></script>
@@ -151,6 +166,117 @@
             }
         }
 
+        function normalMetin(value) {
+            return String(value ?? "")
+                .normalize("NFKD")
+                .toLocaleLowerCase("tr-TR")
+                .replace(/[ıİ]/g, "i")
+                .replace(/[çÇ]/g, "c")
+                .replace(/[ğĞ]/g, "g")
+                .replace(/[öÖ]/g, "o")
+                .replace(/[şŞ]/g, "s")
+                .replace(/[üÜ]/g, "u")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, " ")
+                .trim()
+                .replace(/\s+/g, " ");
+        }
+
+        function normalOkulNo(value) {
+            return String(value ?? "").replace(/\D/g, "");
+        }
+
+        function basitHash(value) {
+            let hash = 2166136261;
+            for (let i = 0; i < value.length; i++) {
+                hash ^= value.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return (hash >>> 0).toString(16).padStart(8, "0");
+        }
+
+        async function ogrenciAnahtariOlustur(okulNo, adSoyad) {
+            const hamAnahtar = `${normalOkulNo(okulNo)}|${normalMetin(adSoyad)}`;
+            if (!hamAnahtar || hamAnahtar === "|") return "";
+
+            if (window.crypto?.subtle) {
+                const bytes = new TextEncoder().encode(hamAnahtar);
+                const digest = await crypto.subtle.digest("SHA-256", bytes);
+                return Array.from(new Uint8Array(digest))
+                    .map((byte) => byte.toString(16).padStart(2, "0"))
+                    .join("");
+            }
+
+            return basitHash(hamAnahtar);
+        }
+
+        function ogrenciYedekAnahtari(kitap) {
+            const no = normalOkulNo(kitap.ogrenciNo || kitap.okulNo);
+            const ad = normalMetin(kitap.ogrenciAdSoyad || kitap.ogrenciGorunenAd || kitap.adSoyad);
+            return `${no}|${ad}`;
+        }
+
+        function liderlikVerisiOlustur(data) {
+            const tablo = new Map();
+
+            data.forEach((kitap, index) => {
+                const anahtar = kitap.ogrenciAnahtari || kitap.ogrenciKey || ogrenciYedekAnahtari(kitap);
+                if (!anahtar || anahtar === "|") return;
+
+                const mevcut = tablo.get(anahtar) || {
+                    adSoyad: kitap.ogrenciGorunenAd || kitap.adSoyad || "---",
+                    okulNo: kitap.ogrenciGorunenNo || kitap.okulNo || "---",
+                    sinif: kitap.sinif || "",
+                    sube: kitap.sube || "",
+                    kitapSayisi: 0,
+                    toplamPuan: 0,
+                    sonIndex: index
+                };
+
+                mevcut.kitapSayisi += 1;
+                mevcut.toplamPuan += Math.max(0, Math.min(5, parseInt(kitap.puan) || 0));
+                mevcut.sonIndex = index;
+                tablo.set(anahtar, mevcut);
+            });
+
+            return Array.from(tablo.values())
+                .map((ogrenci) => ({
+                    ...ogrenci,
+                    ortalamaPuan: ogrenci.kitapSayisi ? ogrenci.toplamPuan / ogrenci.kitapSayisi : 0
+                }))
+                .sort((a, b) =>
+                    b.kitapSayisi - a.kitapSayisi ||
+                    b.ortalamaPuan - a.ortalamaPuan ||
+                    a.sonIndex - b.sonIndex
+                )
+                .slice(0, 5);
+        }
+
+        function liderligiGuncelle(data) {
+            const container = document.getElementById("leaderboardContainer");
+            const liderler = liderlikVerisiOlustur(Array.isArray(data) ? data : []);
+
+            if (liderler.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-400 font-medium">Henüz sıralama oluşmadı.</div>`;
+                return;
+            }
+
+            container.innerHTML = liderler.map((ogrenci, index) => `
+                <div class="bg-white border-2 ${index === 0 ? 'border-amber-300' : 'border-purple-100'} rounded-2xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-lg font-bold text-purple-900">#${index + 1}</span>
+                        <span class="text-[11px] font-bold text-slate-500">${htmlKacir(ogrenci.sinif)}-${htmlKacir(ogrenci.sube)}</span>
+                    </div>
+                    <p class="text-sm font-bold text-slate-900 truncate">${htmlKacir(ogrenci.adSoyad)}</p>
+                    <p class="text-[11px] font-bold text-slate-500">No: ${htmlKacir(ogrenci.okulNo)}</p>
+                    <div class="mt-3 flex items-center justify-between text-xs font-bold">
+                        <span class="text-emerald-700">${ogrenci.kitapSayisi} kitap</span>
+                        <span class="text-amber-600">${ogrenci.ortalamaPuan.toFixed(1)} ★</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
         const subeler = ["A","B","C","Ç","D","E","F","G","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
         const subeSelect = document.getElementById("sube");
         subeler.forEach(s => {
@@ -171,10 +297,10 @@
                 if(val <= puan) { star.classList.remove("text-slate-300"); star.classList.add("text-amber-400"); }
                 else { star.classList.remove("text-amber-400"); star.classList.add("text-slate-300"); }
             });
-            puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız 🌟` : "(Seçmedin)";
+            puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız` : "(Seçmedin)";
         }
 
-        // 🎯 Gelişmiş 3 Yıldız Sabitleyici ve Türkçe Karakter Güvenliği
+        // Türkçe karakter güvenliği
         function maskeAdSoyad(text) {
             if (!text) return "---";
             return text.trim().split(/\s+/).map(kelime => {
@@ -193,16 +319,19 @@
 
         function verileriYukle() {
             const container = document.getElementById("cardsContainer");
-            container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium"><i class="fa-solid fa-spinner animate-spin text-3xl text-indigo-500 block mb-3"></i>Kitaplar raflardan indiriliyor...</div>`;
+            container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium"><span class="animate-pulse text-3xl text-indigo-500 block mb-3">...</span>Kitaplar raflardan indiriliyor...</div>`;
             
             fetch(SCRIPT_URL, { method: "GET", redirect: "follow" })
             .then(response => response.json())
             .then(data => {
                 container.innerHTML = ""; 
                 if(!data || data.length === 0 || data.status === "error") {
-                    container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium">Henüz kitap girilmemiş. İlk sen ol! 🥳</div>`;
+                    liderligiGuncelle([]);
+                    container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium">Henüz kitap girilmemiş. İlk sen ol.</div>`;
                     return;
                 }
+
+                liderligiGuncelle(data);
 
                 const renkler = [
                     'from-rose-100 to-amber-100 border-rose-200 text-rose-950',
@@ -217,7 +346,7 @@
                     let yildizlarHtml = "";
                     const yıldızSayısı = Math.max(0, Math.min(5, parseInt(kitap.puan) || 0));
                     for(let i=1; i<=5; i++) {
-                        yildizlarHtml += i <= yıldızSayısı ? '<i class="fa-solid fa-star text-amber-500 text-base"></i>' : '<i class="fa-regular fa-star text-slate-300 text-base"></i>';
+                        yildizlarHtml += i <= yıldızSayısı ? '<span class="text-amber-500 text-base">★</span>' : '<span class="text-slate-300 text-base">☆</span>';
                     }
 
                     let fotoHtml = "";
@@ -234,24 +363,24 @@
                     card.innerHTML = `
                         <div class="space-y-2">
                             <div class="flex justify-between items-center gap-2">
-                                <span class="bg-white/90 px-3 py-1 rounded-full text-xs font-bold shadow-xs border border-white/50 text-indigo-700">🎓 ${htmlKacir(kitap.sinif)}-${htmlKacir(kitap.sube)}</span>
+                                <span class="bg-white/90 px-3 py-1 rounded-full text-xs font-bold shadow-xs border border-white/50 text-indigo-700"># ${htmlKacir(kitap.sinif)}-${htmlKacir(kitap.sube)}</span>
                                 <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold tracking-tight">👤 ${htmlKacir(kitap.adSoyad)}</h3>
-                                <p class="text-[11px] font-bold opacity-60">No: ${htmlKacir(kitap.okulNo)}</p>
+                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(kitap.ogrenciGorunenAd || kitap.adSoyad)}</h3>
+                                <p class="text-[11px] font-bold opacity-60">No: ${htmlKacir(kitap.ogrenciGorunenNo || kitap.okulNo)}</p>
                             </div>
                         </div>
 
                         <div class="bg-white/60 p-3 rounded-2xl border border-white/50 shadow-inner">
-                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">📚 Kitap</p>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Kitap</p>
                             <p class="text-xs font-bold text-slate-900 line-clamp-2">${htmlKacir(kitap.kitapAdi)}</p>
                         </div>
 
                         ${fotoHtml}
 
                         <div class="flex-grow">
-                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">💭 Yorum</p>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Yorum</p>
                             <p class="text-xs italic font-medium leading-relaxed text-slate-700">"${htmlKacir(kitap.yorum)}"</p>
                         </div>
                     `;
@@ -260,6 +389,7 @@
             })
             .catch(err => {
                 console.error(err);
+                liderligiGuncelle([]);
                 container.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 font-medium bg-red-50 rounded-2xl border-2 border-red-200">Veriler yüklenirken bir senkronizasyon hatası oluştu.</div>`;
             });
         }
@@ -269,11 +399,11 @@
 
         document.getElementById("readingForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            if(secilenPuan === 0) { alert("Lütfen kitaba en az 1 yıldız vererek puanla! ⭐"); return; }
+            if(secilenPuan === 0) { alert("Lütfen kitaba en az 1 yıldız vererek puanla."); return; }
 
             const sonGonderim = Number(localStorage.getItem("kitapSonGonderim") || 0);
             if (Date.now() - sonGonderim < SUBMIT_COOLDOWN_MS) {
-                alert("Çok hızlı gönderim yapıyorsun. Lütfen biraz bekleyip tekrar dene. ⏳");
+                alert("Çok hızlı gönderim yapıyorsun. Lütfen biraz bekleyip tekrar dene.");
                 return;
             }
 
@@ -295,7 +425,7 @@
             const file = fileInput.files[0];
 
             if (file && !file.type.startsWith("image/")) {
-                alert("Lütfen yalnızca görsel dosyası yükle. 🖼️");
+                alert("Lütfen yalnızca görsel dosyası yükle.");
                 return;
             }
 
@@ -306,10 +436,13 @@
 
             const submitBtn = document.getElementById("submitBtn");
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Kitabın Kaydediliyor...';
+            submitBtn.innerHTML = '<span class="animate-pulse">...</span> Kitabın Kaydediliyor...';
 
-            const sendData = (base64String = "") => {
+            const sendData = async (base64String = "") => {
                 const payload = {
+                    ogrenciAnahtari: "",
+                    ogrenciGorunenAd: maskeAdSoyad(hamAd),
+                    ogrenciGorunenNo: maskeOkulNo(document.getElementById("okulNo").value),
                     adSoyad: maskeAdSoyad(hamAd),
                     okulNo: maskeOkulNo(document.getElementById("okulNo").value),
                     sinif: document.getElementById("sinif").value,
@@ -320,6 +453,13 @@
                     fotoBase64: base64String
                 };
 
+                try {
+                    const anahtar = await ogrenciAnahtariOlustur(document.getElementById("okulNo").value, hamAd);
+                    payload.ogrenciAnahtari = anahtar;
+                } catch (error) {
+                    console.warn("Öğrenci anahtarı oluşturulamadı, yedek gruplama kullanılacak.", error);
+                }
+
                 fetch(SCRIPT_URL, {
                     method: "POST",
                     mode: "no-cors",
@@ -328,13 +468,13 @@
                 })
                 .then(() => {
                     localStorage.setItem("kitapSonGonderim", String(Date.now()));
-                    alert("Harika! Kitap yorumun başarıyla eklendi! 🎉📚");
+                    alert("Harika! Kitap yorumun başarıyla eklendi.");
                     document.getElementById("readingForm").reset();
                     secilenPuan = 0; guncelleYildizlar(0);
                     setTimeout(verileriYukle, 2000);
                 })
                 .catch(error => { alert("Bir sorun oluştu."); console.error(error); })
-                .finally(() => { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kitabımı Listeye Ekle!'; });
+                .finally(() => { submitBtn.disabled = false; submitBtn.innerHTML = '+ Kitabımı Listeye Ekle'; });
             };
 
             if (file) {

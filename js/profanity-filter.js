@@ -85,34 +85,34 @@
         const spamHarfRegex = /([a-zğçşüöı])\1{4,}/i;
 
         if (spamHarfRegex.test(kontrolMetni)) {
-            return { uygun: false, neden: "Lütfen anlamsız harf tekrarları (spam) yapma! 🧐" };
+            return { uygun: false, neden: "Lütfen anlamsız harf tekrarları (spam) yapma." };
         }
 
         if (/(asdasd|qweqwe|hjghjg)/i.test(kontrolMetni)) {
-            return { uygun: false, neden: "Lütfen gerçek ve anlamlı cümleler yazmaya özen göster! ✍️" };
+            return { uygun: false, neden: "Lütfen gerçek ve anlamlı cümleler yazmaya özen göster." };
         }
 
         const metinTokenleri = tokensOf(kontrolMetni);
 
         if (metin.length > 3 && metinTokenleri.length === 1 && /^[^aeiouıüöyeâîû]{4,}$/i.test(kontrolMetni)) {
-            return { uygun: false, neden: "Yazdığın kelimeler biraz anlaşılmaz görünüyor, tekrar kontrol eder misin? 🤔" };
+            return { uygun: false, neden: "Yazdığın kelimeler biraz anlaşılmaz görünüyor, tekrar kontrol eder misin?" };
         }
 
         for (const token of metinTokenleri) {
             if (SAFE_WORDS.has(token)) continue;
 
             if (badWords.has(token)) {
-                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor! 🛑" };
+                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor." };
             }
 
             if (PREFIX_BLOCK_ROOTS.some((root) => token.startsWith(root))) {
-                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor! 🛑" };
+                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor." };
             }
         }
 
         for (const word of badWords) {
             if (word.includes(" ") && hasPhrase(kontrolMetni, word)) {
-                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor! 🛑" };
+                return { uygun: false, neden: "Yazdığın mesaj okul kurallarına ve arkadaşlarına uygun olmayan kelimeler içeriyor." };
             }
         }
 
