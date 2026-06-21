@@ -389,6 +389,7 @@
             star.addEventListener("mousemove", (event) => { guncelleYildizlar(puanHesapla(event, star)); });
             star.addEventListener("mouseleave", () => { guncelleYildizlar(secilenPuan); });
         });
+        guncelleYildizlar(0);
 
         function puanHesapla(event, star) {
             const val = parseInt(star.getAttribute("data-value"));
@@ -401,18 +402,43 @@
             return Number(puan).toFixed(1).replace(".0", "").replace(".", ",");
         }
 
+        function yildizSvgHtml(durum) {
+            const path = "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z";
+            const clipId = `halfStar-${Math.random().toString(36).slice(2, 10)}`;
+
+            if (durum === "full") {
+                return `<svg class="w-7 h-7" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}" fill="currentColor"></path></svg>`;
+            }
+
+            if (durum === "half") {
+                return `
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" aria-hidden="true">
+                        <defs>
+                            <clipPath id="${clipId}">
+                                <rect x="0" y="0" width="12" height="24"></rect>
+                            </clipPath>
+                        </defs>
+                        <path d="${path}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path>
+                        <path d="${path}" fill="currentColor" clip-path="url(#${clipId})"></path>
+                    </svg>
+                `;
+            }
+
+            return `<svg class="w-7 h-7" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path></svg>`;
+        }
+
         function guncelleYildizlar(puan) {
             stars.forEach(star => {
                 const val = parseInt(star.getAttribute("data-value"));
                 star.classList.remove("text-amber-400", "text-slate-300");
                 if (val <= puan) {
-                    star.textContent = "★";
+                    star.innerHTML = yildizSvgHtml("full");
                     star.classList.add("text-amber-400");
                 } else if (val - 0.5 <= puan) {
-                    star.textContent = "◐";
+                    star.innerHTML = yildizSvgHtml("half");
                     star.classList.add("text-amber-400");
                 } else {
-                    star.textContent = "☆";
+                    star.innerHTML = yildizSvgHtml("empty");
                     star.classList.add("text-slate-300");
                 }
             });
@@ -466,11 +492,11 @@
                     const yıldızSayısı = kayitPuani(kitap);
                     for(let i=1; i<=5; i++) {
                         if (i <= yıldızSayısı) {
-                            yildizlarHtml += '<span class="text-amber-500 text-base">★</span>';
+                            yildizlarHtml += `<span class="text-amber-500">${yildizSvgHtml("full")}</span>`;
                         } else if (i - 0.5 <= yıldızSayısı) {
-                            yildizlarHtml += '<span class="text-amber-500 text-base">◐</span>';
+                            yildizlarHtml += `<span class="text-amber-500">${yildizSvgHtml("half")}</span>`;
                         } else {
-                            yildizlarHtml += '<span class="text-slate-300 text-base">☆</span>';
+                            yildizlarHtml += `<span class="text-slate-300">${yildizSvgHtml("empty")}</span>`;
                         }
                     }
 

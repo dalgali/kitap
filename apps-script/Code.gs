@@ -1,7 +1,7 @@
 const SHEET_NAME = "Form Yanıtları 1";
 const DRIVE_FOLDER_ID = "";
 const SUBMIT_COOLDOWN_SECONDS = 20;
-const CLASS_CODE = "75EDO";
+const ALLOWED_CLASS_CODES = new Set(["75", "75EDO", "75EDRO"]);
 
 const HEADERS = [
   "Zaman Damgası",
@@ -154,7 +154,7 @@ function validatePayload_(payload) {
   if (!adSoyad || !okulNo || !sinifKodu || !sinif || !sube || !kitapAdi || !yorum) {
     throw new Error("Zorunlu alanlar eksik.");
   }
-  if (sinifKodu !== CLASS_CODE) {
+  if (!ALLOWED_CLASS_CODES.has(sinifKodu)) {
     throw new Error("Sınıf kodu yanlış.");
   }
   if (!ALLOWED_CLASSES.has(sinif)) {
