@@ -10,16 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Comfortaa', cursive;
-        }
-        /* Kartların hafifçe kıpırdaması için tatlı bir animasyon */
-        .cool-card {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .cool-card:hover {
-            transform: translateY(-5px) scale(1.02);
-        }
+        body { font-family: 'Comfortaa', cursive; }
+        .cool-card { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .cool-card:hover { transform: translateY(-5px) scale(1.02); }
     </style>
 </head>
 <body class="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 text-slate-800 min-h-screen antialiased flex flex-col justify-between">
@@ -27,7 +20,6 @@
     <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white py-8 px-4 shadow-xl text-center relative overflow-hidden rounded-b-[2rem]">
         <div class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-300 opacity-20 rounded-full blur-xl"></div>
         <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-pink-400 opacity-20 rounded-full blur-xl"></div>
-        
         <h1 class="text-3xl md:text-5xl font-bold tracking-wide drop-shadow-md flex justify-center items-center gap-3 animate-bounce">
             🚀 Kitap Kurdu Dünyası ✨
         </h1>
@@ -47,13 +39,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">🤠 Adın ve Soyadın</label>
-                        <input type="text" id="adSoyad" required placeholder="Örn: Ahmet Yılmaz" 
-                               class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="text" id="adSoyad" required placeholder="Örn: Ahmet Yılmaz" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">🔢 Okul Numaran</label>
-                        <input type="number" id="okulNo" required placeholder="Örn: 482" 
-                               class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="number" id="okulNo" required placeholder="Örn: 482" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                 </div>
 
@@ -72,14 +62,13 @@
                         <label class="block text-sm font-bold text-indigo-600 mb-1">🅰️ Şuben</label>
                         <select id="sube" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
                             <option value="">Seç..</option>
-                            </select>
+                        </select>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-indigo-600 mb-1">📖 Okuduğun Kitabın Adı</label>
-                    <input type="text" id="kitapAdi" required placeholder="Kitabın adını buraya yazar mısın?" 
-                           class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                    <input type="text" id="kitapAdi" required placeholder="Kitabın adını buraya yazar mısın?" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                 </div>
 
                 <div>
@@ -96,14 +85,20 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-indigo-600 mb-1">💬 Kitap Hakkında Ne Düşünüyorsun?</label>
-                    <textarea id="yorum" required rows="3" placeholder="Sence bu kitap nasıldı? En sevdiğin karakter kim oldu? Kısaca bahset..." 
-                              class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition resize-none"></textarea>
+                <div class="bg-amber-50 p-4 rounded-2xl border-2 border-dashed border-amber-300 space-y-2">
+                    <label class="block text-sm font-bold text-amber-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-camera text-base animate-pulse"></i> 📸 Okuma Kanıtı Yükle (En Sevdiğin Sayfa/Cümle)
+                    </label>
+                    <p class="text-[11px] text-amber-600 font-medium">Yüzün görünmeden, kitaptan en sevdiğin cümlenin veya sayfanın fotoğrafını çekip yükle!</p>
+                    <input type="file" id="fotoKanit" accept="image/*" class="w-full text-xs font-bold text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-amber-100 file:text-amber-700 hover:file:bg-amber-200 cursor-pointer">
                 </div>
 
-                <button type="submit" id="submitBtn" 
-                        class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transition duration-200 text-base shadow-lg hover:shadow-xl transform active:scale-[0.98] cursor-pointer flex justify-center items-center gap-2">
+                <div>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">💬 Kitap Hakkında Ne Düşünüyorsun?</label>
+                    <textarea id="yorum" required rows="3" placeholder="Sence bu kitap nasıldı? En sevdiğin karakter kim oldu? Kısaca bahset..." class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition resize-none"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transition duration-200 text-base shadow-lg hover:shadow-xl transform active:scale-[0.98] cursor-pointer flex justify-center items-center gap-2">
                     <i class="fa-solid fa-paper-plane"></i> Kitabımı Listeye Ekle!
                 </button>
             </form>
@@ -130,56 +125,38 @@
     </main>
 
     <footer class="bg-white border-t border-purple-100 py-4 text-center text-xs font-bold text-purple-400">
-        🎈 Harika Yaz Okuma Serüveni Paneli v2.0
+        🎈 Harika Yaz Okuma Serüveni Paneli v2.5
     </footer>
 
     <script>
-        // 🚀 Google Apps Script URL'si otomatik olarak gömüldü:
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
 
-        // 1. Şube Listesini Dinamik Oluşturma (Ğ hariç Türkçe Alfabe)
+        // 1. Şube Listesi
         const subeler = ["A","B","C","Ç","D","E","F","G","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
         const subeSelect = document.getElementById("sube");
         subeler.forEach(s => {
-            let opt = document.createElement("option");
-            opt.value = s;
-            opt.textContent = s + " Şubesi";
-            subeSelect.appendChild(opt);
+            let opt = document.createElement("option"); opt.value = s; opt.textContent = s + " Şubesi"; subeSelect.appendChild(opt);
         });
 
-        // 2. Yıldız Puanlama Mantığı
+        // 2. Yıldızlar
         let secilenPuan = 0;
         const stars = document.querySelectorAll(".star-btn");
         const puanLabel = document.getElementById("puanLabel");
-
         stars.forEach(star => {
-            star.addEventListener("click", () => {
-                secilenPuan = parseInt(star.getAttribute("data-value"));
-                guncelleYildizlar(secilenPuan);
-            });
-            star.addEventListener("mouseover", () => {
-                guncelleYildizlar(parseInt(star.getAttribute("data-value")));
-            });
-            star.addEventListener("mouseleave", () => {
-                guncelleYildizlar(secilenPuan);
-            });
+            star.addEventListener("click", () => { secilenPuan = parseInt(star.getAttribute("data-value")); guncelleYildizlar(secilenPuan); });
+            star.addEventListener("mouseover", () => { guncelleYildizlar(parseInt(star.getAttribute("data-value"))); });
+            star.addEventListener("mouseleave", () => { guncelleYildizlar(secilenPuan); });
         });
-
         function guncelleYildizlar(puan) {
             stars.forEach(star => {
                 const val = parseInt(star.getAttribute("data-value"));
-                if(val <= puan) {
-                    star.classList.remove("text-slate-300");
-                    star.classList.add("text-amber-400");
-                } else {
-                    star.classList.remove("text-amber-400");
-                    star.classList.add("text-slate-300");
-                }
+                if(val <= puan) { star.classList.remove("text-slate-300"); star.classList.add("text-amber-400"); }
+                else { star.classList.remove("text-amber-400"); star.classList.add("text-slate-300"); }
             });
             puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız 🌟` : "(Seçmedin)";
         }
 
-        // 3. KVKK Maskeleme Algoritmaları
+        // 3. KVKK Maskeleme
         function maskeAdSoyad(text) {
             if (!text) return "---";
             return text.trim().split(/\s+/).map(kelime => {
@@ -187,34 +164,23 @@
                 return kelime[0] + "*".repeat(kelime.length - 1);
             }).join(" ");
         }
-
         function maskeOkulNo(no) {
             if (!no) return "---";
             let str = no.toString();
-            if(str.length <= 2) return "**";
-            return str.slice(0, -2) + "**";
+            return str.length <= 2 ? "**" : str.slice(0, -2) + "**";
         }
 
-        // 4. Verileri Google Sheets'ten Çekip Canlı Kart Yapma (GET)
+        // 4. Verileri Google Sheets'ten Çekme (GET)
         function verileriYukle() {
             const container = document.getElementById("cardsContainer");
-            
-            container.innerHTML = `
-                <div id="loadingText" class="text-center py-8 text-slate-400 font-medium">
-                    <i class="fa-solid fa-spinner animate-spin text-2xl text-indigo-500 block mb-2"></i>
-                    Kitaplar raflardan indiriliyor, lütfen bekle...
-                </div>`;
+            container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium"><i class="fa-solid fa-spinner animate-spin text-2xl text-indigo-500 block mb-2"></i>Kitaplar raflardan indiriliyor...</div>`;
             
             fetch(SCRIPT_URL, { method: "GET", redirect: "follow" })
-            .then(response => {
-                if (!response.ok) throw new Error('Ağ yanıtı düzgün değil.');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 container.innerHTML = ""; 
-                
-                if(!data || data.length === 0) {
-                    container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium">Henüz kimse kitap girmemiş. İlk sen ol! 🥳</div>`;
+                if(!data || data.length === 0 || data.status === "error") {
+                    container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium">Henüz kitap girilmemiş veya veri okunamadı. İlk sen ol! 🥳</div>`;
                     return;
                 }
 
@@ -228,22 +194,18 @@
 
                 data.forEach((kitap, index) => {
                     const secilenRenk = renkler[index % renkler.length];
-                    
                     let yildizlarHtml = "";
                     for(let i=1; i<=5; i++) {
-                        if(i <= kitap.puan) {
-                            yildizlarHtml += '<i class="fa-solid fa-star text-amber-500 text-lg"></i>';
-                        } else {
-                            yildizlarHtml += '<i class="fa-regular fa-star text-slate-300 text-lg"></i>';
-                        }
+                        yildizlarHtml += i <= kitap.puan ? '<i class="fa-solid fa-star text-amber-500 text-lg"></i>' : '<i class="fa-regular fa-star text-slate-300 text-lg"></i>';
                     }
 
-                    let temizTarih = "Yakınlarda";
-                    if(kitap.zaman) {
-                        let tarih = new Date(kitap.zaman);
-                        if(!isNaN(tarih)) {
-                            temizTarih = tarih.toLocaleDateString('tr-TR') + " - " + tarih.toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-                        }
+                    // Fotoğraf Alanı Şablonu
+                    let fotoHtml = "";
+                    if (kitap.fotoUrl && kitap.fotoUrl !== "Fotoğraf Yok") {
+                        fotoHtml = `
+                        <div class="mt-2 rounded-xl overflow-hidden border border-black/10 shadow-inner max-h-48 flex justify-center bg-black/5">
+                            <img src="${kitap.fotoUrl}" class="w-full h-full object-cover" alt="Kitap Kanıtı" onerror="this.parentElement.style.display='none';">
+                        </div>`;
                     }
 
                     const card = document.createElement("div");
@@ -251,87 +213,79 @@
                     card.innerHTML = `
                         <div class="flex justify-between items-start gap-2">
                             <div>
-                                <span class="bg-white/80 px-2.5 py-1 rounded-full text-xs font-bold shadow-xs">
-                                    🎓 ${kitap.sinif}-${kitap.sube}
-                                </span>
-                                <h3 class="text-base font-bold mt-2">
-                                    👤 ${kitap.adSoyad} <span class="text-xs font-medium opacity-70">(No: ${kitap.okulNo})</span>
-                                </h3>
+                                <span class="bg-white/80 px-2.5 py-1 rounded-full text-xs font-bold shadow-xs">🎓 ${kitap.sinif}-${kitap.sube}</span>
+                                <h3 class="text-base font-bold mt-2">👤 ${kitap.adSoyad} <span class="text-xs font-medium opacity-70">(No: ${kitap.okulNo})</span></h3>
                             </div>
-                            <div class="flex bg-white/60 p-1.5 rounded-xl shadow-xs">
-                                ${yildizlarHtml}
-                            </div>
+                            <div class="flex bg-white/60 p-1.5 rounded-xl shadow-xs">${yildizlarHtml}</div>
                         </div>
                         <div class="bg-white/50 p-3 rounded-xl border border-white/40">
                             <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-0.5">📚 Okunan Kitap</p>
-                            <p class="text-sm font-bold text-slate-900">${kitap.kitapAdi}</p>
+                            <p class="text-sm font-bold text-slate-900">${kitap.kitAdi || kitap.kitapAdi}</p>
                         </div>
+                        ${fotoHtml}
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-0.5">💭 Kitap Yorumu</p>
                             <p class="text-sm italic font-medium">"${kitap.yorum}"</p>
-                        </div>
-                        <div class="text-[10px] text-right opacity-60 font-bold">
-                            ⏰ ${temizTarih}
                         </div>
                     `;
                     container.appendChild(card);
                 });
             })
             .catch(err => {
-                console.error("Veri çekme hatası:", err);
-                container.innerHTML = `<div class="text-center py-8 text-red-400 font-medium bg-red-50 rounded-2xl border-2 border-red-200">Veriler yüklenirken bir sorun oluştu. Lütfen yenile butonuna bas veya Apps Script linkini kontrol et! 🛠️</div>`;
+                container.innerHTML = `<div class="text-center py-8 text-red-400 font-medium bg-red-50 rounded-2xl border-2 border-red-200">Bağlantı başarıyla sağlandı ancak veri çekme aşamasında bir uyumsuzluk var. Lütfen sayfayı yenile butonuna bas! 🛠️</div>`;
             });
         }
 
         window.addEventListener("DOMContentLoaded", verileriYukle);
         document.getElementById("refreshBtn").addEventListener("click", verileriYukle);
 
-        // 5. Formu Gönderme Mantığı (POST)
+        // 5. Formu Gönderme (POST)
         document.getElementById("readingForm").addEventListener("submit", function(e) {
             e.preventDefault();
-            
-            if(secilenPuan === 0) {
-                alert("Lütfen kitaba en az 1 yıldız vererek puanla! ⭐");
-                return;
-            }
+            if(secilenPuan === 0) { alert("Lütfen kitaba en az 1 yıldız vererek puanla! ⭐"); return; }
 
             const submitBtn = document.getElementById("submitBtn");
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Kitabın Kaydediliyor...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Kitabın ve Fotoğrafın Kaydediliyor...';
 
-            const payload = {
-                adSoyad: maskeAdSoyad(document.getElementById("adSoyad").value),
-                okulNo: maskeOkulNo(document.getElementById("okulNo").value),
-                sinif: document.getElementById("sinif").value,
-                sube: document.getElementById("sube").value,
-                kitapAdi: document.getElementById("kitapAdi").value,
-                yorum: document.getElementById("yorum").value,
-                puan: secilenPuan
+            const fileInput = document.getElementById("fotoKanit");
+            const file = fileInput.files[0];
+
+            const sendData = (base64String = "") => {
+                const payload = {
+                    adSoyad: maskeAdSoyad(document.getElementById("adSoyad").value),
+                    okulNo: maskeOkulNo(document.getElementById("okulNo").value),
+                    sinif: document.getElementById("sinif").value,
+                    sube: document.getElementById("sube").value,
+                    kitapAdi: document.getElementById("kitapAdi").value,
+                    yorum: document.getElementById("yorum").value,
+                    puan: secilenPuan,
+                    fotoBase64: base64String
+                };
+
+                fetch(SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    alert("Harika! Kitap yorumun ve okuma kanıtın başarıyla panoya eklendi! 🎉📚");
+                    document.getElementById("readingForm").reset();
+                    secilenPuan = 0; guncelleYildizlar(0);
+                    setTimeout(verileriYukle, 1500);
+                })
+                .catch(error => { alert("Bir sorun oluştu, lütfen tekrar dene."); console.error(error); })
+                .finally(() => { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kitabımı Listeye Ekle!'; });
             };
 
-            fetch(SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                cache: "no-cache",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                alert("Harika! Kitap yorumun panoya eklendi. Süpersin! 🎉📚");
-                document.getElementById("readingForm").reset();
-                secilenPuan = 0;
-                guncelleYildizlar(0);
-                
-                setTimeout(verileriYukle, 1000);
-            })
-            .catch(error => {
-                alert("Bir hata oluştu, internetini kontrol edip tekrar dener misin? 🧐");
-                console.error("Error:", error);
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kitabımı Listeye Ekle!';
-            });
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) { sendData(event.target.result); };
+                reader.readAsDataURL(file);
+            } else {
+                sendData("");
+            }
         });
     </script>
 </body>
