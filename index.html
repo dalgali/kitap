@@ -7,8 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap&subset=latin-ext" rel="stylesheet">
     <style>
+        html { background: #6d28d9; }
         body { font-family: 'Comfortaa', cursive; }
         .cool-card { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .cool-card:hover { 
@@ -37,11 +38,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">Adın ve Soyadın</label>
-                        <input type="text" id="adSoyad" required maxlength="60" autocomplete="name" placeholder="Örn: Cemal Dalgalı" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="text" id="adSoyad" required maxlength="60" autocomplete="name" placeholder="Örnek: Cemal Dalgalı" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">Okul Numaran</label>
-                        <input type="number" id="okulNo" required min="1" max="99999" placeholder="Örn: 482" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="number" id="okulNo" required min="1" max="99999" placeholder="Örnek: 482" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                 </div>
 
@@ -105,10 +106,10 @@
         <section class="space-y-4">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xl md:text-2xl font-bold text-purple-900 flex items-center gap-2">
-                    ★ İlk 5 Okur
+                    ★ En Çok Okuyanlar
                 </h2>
                 <span class="text-[11px] font-bold text-purple-500 bg-white px-3 py-1.5 rounded-full border border-purple-100 shadow-xs">
-                    okul no + ad soyad
+                    ilk 5 okur
                 </span>
             </div>
             <div id="leaderboardContainer" class="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -216,6 +217,12 @@
             return `${no}|${ad}`;
         }
 
+        function sinifSubeAnahtari(kitap) {
+            const sinif = String(kitap.sinif ?? "").trim();
+            const sube = String(kitap.sube ?? "").trim().toLocaleUpperCase("tr-TR");
+            return sinif || sube ? `${sinif}|${sube}` : "";
+        }
+
         function liderlikVerisiOlustur(data) {
             const tablo = new Map();
 
@@ -226,24 +233,46 @@
                 const mevcut = tablo.get(anahtar) || {
                     adSoyad: kitap.ogrenciGorunenAd || kitap.adSoyad || "---",
                     okulNo: kitap.ogrenciGorunenNo || kitap.okulNo || "---",
-                    sinif: kitap.sinif || "",
-                    sube: kitap.sube || "",
+                    sinif: "",
+                    sube: "",
                     kitapSayisi: 0,
                     toplamPuan: 0,
-                    sonIndex: index
+                    sonIndex: index,
+                    sinifSubeSayilari: new Map()
                 };
 
                 mevcut.kitapSayisi += 1;
                 mevcut.toplamPuan += Math.max(0, Math.min(5, parseInt(kitap.puan) || 0));
                 mevcut.sonIndex = index;
+
+                const sinifSube = sinifSubeAnahtari(kitap);
+                if (sinifSube) {
+                    const onceki = mevcut.sinifSubeSayilari.get(sinifSube) || {
+                        sinif: String(kitap.sinif ?? "").trim(),
+                        sube: String(kitap.sube ?? "").trim().toLocaleUpperCase("tr-TR"),
+                        adet: 0,
+                        sonIndex: index
+                    };
+                    onceki.adet += 1;
+                    onceki.sonIndex = index;
+                    mevcut.sinifSubeSayilari.set(sinifSube, onceki);
+                }
+
                 tablo.set(anahtar, mevcut);
             });
 
             return Array.from(tablo.values())
-                .map((ogrenci) => ({
-                    ...ogrenci,
-                    ortalamaPuan: ogrenci.kitapSayisi ? ogrenci.toplamPuan / ogrenci.kitapSayisi : 0
-                }))
+                .map((ogrenci) => {
+                    const secilenSinifSube = Array.from(ogrenci.sinifSubeSayilari.values())
+                        .sort((a, b) => b.adet - a.adet || b.sonIndex - a.sonIndex)[0];
+
+                    return {
+                        ...ogrenci,
+                        sinif: secilenSinifSube?.sinif || "",
+                        sube: secilenSinifSube?.sube || "",
+                        ortalamaPuan: ogrenci.kitapSayisi ? ogrenci.toplamPuan / ogrenci.kitapSayisi : 0
+                    };
+                })
                 .sort((a, b) =>
                     b.kitapSayisi - a.kitapSayisi ||
                     b.ortalamaPuan - a.ortalamaPuan ||
