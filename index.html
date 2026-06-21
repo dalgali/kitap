@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaz Kitap Okuma Takip Sistemi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Stars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r自动 bg-indigo-600 text-white py-6 shadow-md text-center">
+        <h1 class="text-2xl md:text-3xl font-bold tracking-wide">📚 Kitap Kurdu Takip Sistemi</h1>
+        <p class="text-sm text-indigo-100 mt-1">Yaz tatili okuma günlüklerinizi buradan paylaşabilirsiniz.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-xl w-full mx-auto p-4 md:p-6 my-6 bg-white rounded-2xl shadow-sm border border-slate-100">
+        
+        <form id="readingForm" class="space-y-5">
+            <!-- Öğrenci Kimlik Alanı (Grid) -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Ad Soyad</label>
+                    <input type="text" id="adSoyad" required placeholder="Örn: Ahmet Yılmaz" 
+                           class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Okul Numarası</label>
+                    <input type="number" id="okulNo" required placeholder="Örn: 145" 
+                           class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Sınıf & Şube Seçimi -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Sınıf</label>
+                    <select id="sinif" required class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-indigo-500 text-sm">
+                        <option value="">Seçiniz</option>
+                        <option value="5">5. Sınıf</option>
+                        <option value="6">6. Sınıf</option>
+                        <option value="7">7. Sınıf</option>
+                        <option value="8">8. Sınıf</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Şube</label>
+                    <select id="sube" required class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-indigo-500 text-sm">
+                        <option value="">Seçiniz</option>
+                        <!-- JavaScript ile doldurulacak -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Kitap Bilgileri -->
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Okuduğunuz Kitabın Adı</label>
+                <input type="text" id="kitapAdi" required placeholder="Kitap adını tam yazınız..." 
+                       class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm">
+            </div>
+
+            <!-- Yıldız Puanlama -->
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Kitaba Puanınız</label>
+                <div class="flex items-center space-x-2 mt-1">
+                    <div id="starContainer" class="flex text-2xl text-slate-300 cursor-pointer">
+                        <i class="fa-solid fa-star star-btn" data-value="1"></i>
+                        <i class="fa-solid fa-star star-btn ml-1" data-value="2"></i>
+                        <i class="fa-solid fa-star star-btn ml-1" data-value="3"></i>
+                        <i class="fa-solid fa-star star-btn ml-1" data-value="4"></i>
+                        <i class="fa-solid fa-star star-btn ml-1" data-value="5"></i>
+                    </div>
+                    <span id="puanLabel" class="text-xs font-bold text-slate-400 ml-2">(Seçilmedi)</span>
+                </div>
+            </div>
+
+            <!-- Kitap Yorumu -->
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Kitap Hakkındaki Yorumunuz</label>
+                <textarea id="yorum" required rows="4" placeholder="Bu kitabı neden beğendiniz veya beğenmediniz? Kısaca açıklayın..." 
+                          class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-500 text-sm resize-none"></textarea>
+            </div>
+
+            <!-- Gönder Butonu -->
+            <button type="submit" id="submitBtn" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 text-sm shadow-sm">
+                Kaydı Tamamla ve Gönder
+            </button>
+        </form>
+
+        <!-- Canlı Önizleme Alanı (KVKK Maskeleme Gösterimi) -->
+        <div class="mt-8 pt-6 border-t border-slate-100 bg-slate-50 p-4 rounded-xl">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">🔒 Sistemde Görünecek Hali (Önizleme)</h3>
+            <div class="text-xs space-y-1 text-slate-600">
+                <p><strong>Öğrenci:</strong> <span id="previewName">---</span> (<span id="previewSinif">--</span>)</p>
+                <p><strong>Okul No:</strong> <span id="previewNo">---</span></p>
+                <p><strong>Kitap:</strong> <span id="previewKitap">---</span></p>
+                <p><strong>Puan:</strong> <span id="previewPuan">0/5</span></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400">
+        &copy; 2026 Dijital Kütüphane Takip Sistemi. Tüm Hakları Saklıdır.
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // 1. Google Apps Script Web App URL'nizi buraya yapıştırın
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
+
+        // 2. Şube Listesini Dinamik Oluşturma (Ğ hariç Türkçe Alfabe)
+        const subeler = ["A","B","C","Ç","D","E","F","G","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
+        const subeSelect = document.getElementById("sube");
+        subeler.forEach(s => {
+            let opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s + " Şubesi";
+            subeSelect.appendChild(opt);
+        });
+
+        // 3. Yıldız Puanlama Mantığı
+        let secilenPuan = 0;
+        const stars = document.querySelectorAll(".star-btn");
+        const puanLabel = document.getElementById("puanLabel");
+
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                secilenPuan = parseInt(star.getAttribute("data-value"));
+                guncelleYildizlar(secilenPuan);
+            });
+            star.addEventListener("mouseover", () => {
+                guncelleYildizlar(parseInt(star.getAttribute("data-value")));
+            });
+            star.addEventListener("mouseleave", () => {
+                guncelleYildizlar(secilenPuan);
+            });
+        });
+
+        function guncelleYildizlar(puan) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute("data-value"));
+                if(val <= puan) {
+                    star.classList.remove("text-slate-300");
+                    star.classList.add("text-amber-400");
+                } else {
+                    star.classList.remove("text-amber-400");
+                    star.classList.add("text-slate-300");
+                }
+            });
+            puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız` : "(Seçilmedi)";
+            document.getElementById("previewPuan").textContent = `${puan}/5`;
+        }
+
+        // 4. Sansürleme (Maskeleme) Algoritmaları
+        function maskeAdSoyad(text) {
+            if (!text) return "---";
+            return text.split(" ").map(kelime => {
+                if(kelime.length <= 1) return kelime;
+                return kelime[0] + "*".repeat(kelime.length - 1);
+            }).join(" ");
+        }
+
+        function maskeOkulNo(no) {
+            if (!no) return "---";
+            let str = no.toString();
+            if(str.length <= 2) return "**";
+            return str.slice(0, -2) + "**";
+        }
+
+        // 5. Canlı Önizleme Dinleyicileri
+        document.getElementById("adSoyad").addEventListener("input", (e) => {
+            document.getElementById("previewName").textContent = maskeAdSoyad(e.target.value);
+        });
+        document.getElementById("okulNo").addEventListener("input", (e) => {
+            document.getElementById("previewNo").textContent = maskeOkulNo(e.target.value);
+        });
+        document.getElementById("sinif").addEventListener("change", updateClassPreview);
+        document.getElementById("sube").addEventListener("change", updateClassPreview);
+        document.getElementById("kitapAdi").addEventListener("input", (e) => {
+            document.getElementById("previewKitap").textContent = e.target.value || "---";
+        });
+
+        function updateClassPreview() {
+            const snf = document.getElementById("sinif").value;
+            const sb = document.getElementById("sube").value;
+            document.getElementById("previewSinif").textContent = `${snf || '-'}-${sb || '-'}`;
+        }
+
+        // 6. Form Gönderimi (Veritabanına Gönderim)
+        document.getElementById("readingForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            if(secilenPuan === 0) {
+                alert("Lütfen kitaba bir puan veriniz!");
+                return;
+            }
+
+            const submitBtn = document.getElementById("submitBtn");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Gönderiliyor...";
+
+            // Form verilerini oku ve maskelenmiş hallerini ata
+            const payload = {
+                adSoyad: maskeAdSoyad(document.getElementById("adSoyad").value),
+                okulNo: maskeOkulNo(document.getElementById("okulNo").value),
+                sinif: document.getElementById("sinif").value,
+                sube: document.getElementById("sube").value,
+                kitapAdi: document.getElementById("kitapAdi").value,
+                yorum: document.getElementById("yorum").value,
+                puan: secilenPuan
+            };
+
+            // API İstek mekanizması
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Cross-origin kısıtlamasını aşmak için
+                cache: "no-cache",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                alert("Harika! Kitap yorumun başarıyla sisteme kaydedildi. Keyifli okumalar!");
+                document.getElementById("readingForm").reset();
+                secilenPuan = 0;
+                guncelleYildizlar(0);
+                // Önizlemeleri sıfırla
+                document.getElementById("previewName").textContent = "---";
+                document.getElementById("previewNo").textContent = "---";
+                document.getElementById("previewKitap").textContent = "---";
+                document.getElementById("previewSinif").textContent = "--";
+            })
+            .catch(error => {
+                alert("Bir hata oluştu, lütfen tekrar deneyin.");
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Kaydı Tamamla ve Gönder";
+            });
+        });
+    </script>
+</body>
+</html>
