@@ -38,7 +38,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">🤠 Adın ve Soyadın</label>
-                        <input type="text" id="adSoyad" required placeholder="Örn: Ahmet Yılmaz" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="text" id="adSoyad" required placeholder="Ör. Cemal Dalgalı" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-indigo-600 mb-1">🔢 Okul Numaran</label>
@@ -123,49 +123,39 @@
     </main>
 
     <footer class="bg-white border-t border-purple-100 py-4 text-center text-xs font-bold text-purple-400">
-        🎈 Harika Yaz Okuma Serüveni Paneli v3.5
+        🎈 Harika Yaz Okuma Serüveni Paneli v3.6
     </footer>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
 
-        // 🛡️ İNTERNETTEN DERLENMİŞ KÜFÜR, ARGO VE UYGUNSUZ KELİME VERİTABANI
         const GENIS_KARA_LISTE = [
             "salak", "aptal", "mal", "gerizekali", "gerizekalı", "manyak", "oç", "piç", "sik", "amk", "aq", 
             "orospu", "pezevenk", "göt", "meme", "yavşak", "it", "köpek", "şerefsiz", "pust", "puşt", "hıyar",
             "skerim", "sikerim", "amına", "kaltak", "fahişe", "gavat", "pç", "yarak", "yarrak", "taşşak", "tassak"
         ];
 
-        // 🧠 AKILLI İÇERİK DENETLEYİCİ (SPAM VE KÜFÜR KONTROLÜ)
         function icerikUygunMu(metin) {
             if (!metin) return { uygun: true };
-            
             const kontrolMetni = metin.toLowerCase().trim();
 
-            // 1. Kural: Spam Kontrolü (Aynı harf ardı ardına 4 kereden fazla tekrarlanmış mı? Örn: "aaaaaa")
             const spamHarfRegex = /([a-zğçşüöı])\1{4,}/i;
             if (spamHarfRegex.test(kontrolMetni)) {
                 return { uygun: false, neden: "Lütfen anlamsız harf tekrarları (spam) yapma! 🧐" };
             }
 
-            // 2. Kural: Rastgele Tuşlama/Spam Kontrolü (Örn: "asdasdasd", "qweqweqwe")
             if (kontrolMetni.includes("asdasd") || kontrolMetni.includes("qweqwe") || kontrolMetni.includes("hjghjg")) {
                 return { uygun: false, neden: "Lütfen gerçek ve anlamlı cümleler yazmaya özen göster! ✍️" };
             }
 
-            // 3. Kural: Kısa Anlamsız Spam Kontrolü (Örn: "dfg", "jklm")
             if (metin.length > 3 && /^[^aeiouıüöyeâîû]{4,}$/i.test(kontrolMetni)) {
                 return { uygun: false, neden: "Yazdığın kelimeler biraz anlaşılmaz görünüyor, tekrar kontrol eder misin? 🤔" };
             }
 
-            // 4. Kural: Küfür ve Argo Filtresi
             let yakalananKelime = false;
             GENIS_KARA_LISTE.forEach(kelime => {
-                // Kelime sınırlarına duyarlı arama yapar (Böylece "bal" yazınca "mal" diye tetiklenmez)
                 const regex = new RegExp(kelime, "i");
-                if (regex.test(kontrolMetni)) {
-                    yakalananKelime = true;
-                }
+                if (regex.test(kontrolMetni)) { yakalananKelime = true; }
             });
 
             if (yakalananKelime) {
@@ -198,11 +188,12 @@
             puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız 🌟` : "(Seçmedin)";
         }
 
+        // ⚡ GÜNCELLEME: Herkesin ismini kesin olarak İlk Harf + 3 Yıldız yapan fonksiyon
         function maskeAdSoyad(text) {
             if (!text) return "---";
             return text.trim().split(/\s+/).map(kelime => {
-                if(kelime.length <= 1) return kelime;
-                return kelime[0] + "*".repeat(kelime.length - 1);
+                if(kelime.length === 0) return "";
+                return kelime[0].toUpperCase() + "***";
             }).join(" ");
         }
 
@@ -297,7 +288,6 @@
             const hamKitap = document.getElementById("kitapAdi").value;
             const hamAd = document.getElementById("adSoyad").value;
 
-            // 🛡️ AKTİF DENETİM BAŞLIYOR: Spam veya Küfür varsa form gönderilmez
             const yorumKontrol = icerikUygunMu(hamYorum);
             const kitapKontrol = icerikUygunMu(hamKitap);
             const adKontrol = icerikUygunMu(hamAd);
