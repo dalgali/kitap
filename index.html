@@ -11,8 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Comfortaa', cursive; }
-        .cool-card { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .cool-card:hover { transform: translateY(-5px) scale(1.02); }
+        .cool-card { 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .cool-card:hover { 
+            transform: translateY(-6px) rotate(-1deg); 
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 text-slate-800 min-h-screen antialiased flex flex-col justify-between">
@@ -28,9 +33,9 @@
         </p>
     </header>
 
-    <main class="max-w-2xl w-full mx-auto p-4 md:p-6 space-y-10 my-4 flex-grow">
+    <main class="max-w-6xl w-full mx-auto p-4 md:p-6 space-y-12 my-4 flex-grow">
         
-        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-purple-200 relative">
+        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-8 border-4 border-purple-200 relative">
             <form id="readingForm" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -100,7 +105,7 @@
             </form>
         </div>
 
-        <div class="space-y-4">
+        <div class="space-y-6">
             <div class="flex justify-between items-center px-2">
                 <h2 class="text-xl md:text-2xl font-bold text-purple-900 flex items-center gap-2">
                     🎉 Canlı Okuma Akışı <span class="animate-pulse text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">CANLI</span>
@@ -110,9 +115,9 @@
                 </button>
             </div>
             
-            <div id="cardsContainer" class="grid grid-cols-1 gap-4">
-                <div id="loadingText" class="text-center py-8 text-slate-400 font-medium">
-                    <i class="fa-solid fa-spinner animate-spin text-2xl text-indigo-500 block mb-2"></i>
+            <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="loadingText" class="col-span-full text-center py-12 text-slate-400 font-medium">
+                    <i class="fa-solid fa-spinner animate-spin text-3xl text-indigo-500 block mb-3"></i>
                     Kitaplar raflardan indiriliyor, lütfen bekle...
                 </div>
             </div>
@@ -120,11 +125,25 @@
     </main>
 
     <footer class="bg-white border-t border-purple-100 py-4 text-center text-xs font-bold text-purple-400">
-        🎈 Harika Yaz Okuma Serüveni Paneli v2.6
+        🎈 Harika Yaz Okuma Serüveni Paneli v3.0
     </footer>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
+
+        // 🛡️ SANSÜR SİSTEMİ (Yerel Argo/Küfür Filtre Listesi)
+        // Buraya engellemek veya yıldızlamak istediğin kelimeleri ekleyebilirsin
+        const KAFE_KARA_LISTE = ["küfür1", "argo2", "salak", "aptal", "mal", "gerizekalı", "balkabağı"]; 
+
+        function icerikFiltrele(metin) {
+            if(!metin) return "";
+            let temizMetin = metin;
+            KAFE_KARA_LISTE.forEach(kelime => {
+                const regex = new RegExp(kelime, "gi");
+                temizMetin = temizMetin.replace(regex, "***");
+            });
+            return temizMetin;
+        }
 
         const subeler = ["A","B","C","Ç","D","E","F","G","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
         const subeSelect = document.getElementById("sube");
@@ -156,31 +175,37 @@
                 return kelime[0] + "*".repeat(kelime.length - 1);
             }).join(" ");
         }
+
+        // 🛠️ DÜZELTME: Okul numaralarının "1" kalma sorununu çözen yeni fonksiyon
         function maskeOkulNo(no) {
             if (!no) return "---";
-            let str = no.toString();
-            return str.length <= 2 ? "**" : str.slice(0, -2) + "**";
+            let str = no.toString().trim();
+            if(str.length <= 1) return str; 
+            if(str.length === 2) return str[0] + "*";
+            // Çok haneliler için ortasını maskeler (Örn: 482 -> 4*2, 1254 -> 1**4)
+            return str[0] + "*".repeat(str.length - 2) + str[str.length - 1];
         }
 
         function verileriYukle() {
             const container = document.getElementById("cardsContainer");
-            container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium"><i class="fa-solid fa-spinner animate-spin text-2xl text-indigo-500 block mb-2"></i>Kitaplar raflardan indiriliyor...</div>`;
+            container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium"><i class="fa-solid fa-spinner animate-spin text-3xl text-indigo-500 block mb-3"></i>Kitaplar raflardan indiriliyor...</div>`;
             
             fetch(SCRIPT_URL, { method: "GET", redirect: "follow" })
             .then(response => response.json())
             .then(data => {
                 container.innerHTML = ""; 
                 if(!data || data.length === 0 || data.status === "error") {
-                    container.innerHTML = `<div class="text-center py-8 text-slate-400 font-medium">Henüz kitap girilmemiş. İlk sen ol! 🥳</div>`;
+                    container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium">Henüz kitap girilmemiş. İlk sen ol! 🥳</div>`;
                     return;
                 }
 
+                // Daha canlı, soft ve eğlenceli pastel renk paleti
                 const renkler = [
-                    'from-pink-100 to-rose-100 border-pink-300 text-pink-900',
-                    'from-amber-100 to-orange-100 border-amber-300 text-amber-900',
-                    'from-emerald-100 to-teal-100 border-emerald-300 text-emerald-900',
-                    'from-sky-100 to-indigo-100 border-sky-300 text-sky-900',
-                    'from-purple-100 to-fuchsia-100 border-purple-300 text-purple-900'
+                    'from-rose-100 to-amber-100 border-rose-200 text-rose-950',
+                    'from-sky-100 to-indigo-100 border-sky-200 text-sky-950',
+                    'from-emerald-100 to-teal-100 border-emerald-200 text-emerald-950',
+                    'from-violet-100 to-fuchsia-100 border-violet-200 text-violet-950',
+                    'from-amber-100 to-yellow-100 border-amber-200 text-amber-950'
                 ];
 
                 data.forEach((kitap, index) => {
@@ -188,35 +213,41 @@
                     let yildizlarHtml = "";
                     const yıldızSayısı = parseInt(kitap.puan) || 5;
                     for(let i=1; i<=5; i++) {
-                        yildizlarHtml += i <= yıldızSayısı ? '<i class="fa-solid fa-star text-amber-500 text-lg"></i>' : '<i class="fa-regular fa-star text-slate-300 text-lg"></i>';
+                        yildizlarHtml += i <= yıldızSayısı ? '<i class="fa-solid fa-star text-amber-500 text-base"></i>' : '<i class="fa-regular fa-star text-slate-300 text-base"></i>';
                     }
 
                     let fotoHtml = "";
                     if (kitap.fotoUrl && kitap.fotoUrl !== "Fotoğraf Yok") {
                         fotoHtml = `
-                        <div class="mt-2 rounded-xl overflow-hidden border border-black/10 shadow-inner max-h-64 flex justify-center bg-black/5">
-                            <img src="${kitap.fotoUrl}" class="w-full h-full object-contain p-1" alt="Kitap Kanıtı" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
+                        <div class="mt-2 rounded-2xl overflow-hidden border-2 border-white shadow-xs max-h-48 flex justify-center bg-slate-900/5 relative group">
+                            <img src="${kitap.fotoUrl}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" alt="Kitap Kanıtı" referrerpolicy="no-referrer" onerror="this.parentElement.style.display='none';">
                         </div>`;
                     }
 
                     const card = document.createElement("div");
-                    card.className = `cool-card bg-gradient-to-br ${secilenRenk} border-2 rounded-2xl p-5 shadow-md flex flex-col justify-between space-y-3`;
+                    card.className = `cool-card bg-gradient-to-br ${secilenRenk} border-2 rounded-3xl p-5 shadow-sm flex flex-col justify-between space-y-4`;
                     card.innerHTML = `
-                        <div class="flex justify-between items-start gap-2">
-                            <div>
-                                <span class="bg-white/80 px-2.5 py-1 rounded-full text-xs font-bold shadow-xs">🎓 ${kitap.sinif}-${kitap.sube}</span>
-                                <h3 class="text-base font-bold mt-2">👤 ${kitap.adSoyad} <span class="text-xs font-medium opacity-70">(No: ${kitap.okulNo})</span></h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center gap-2">
+                                <span class="bg-white/90 px-3 py-1 rounded-full text-xs font-bold shadow-xs border border-white/50 text-indigo-700">🎓 ${kitap.sinif}-${kitap.sube}</span>
+                                <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
-                            <div class="flex bg-white/60 p-1.5 rounded-xl shadow-xs">${yildizlarHtml}</div>
+                            <div>
+                                <h3 class="text-sm font-bold tracking-tight">👤 ${kitap.adSoyad}</h3>
+                                <p class="text-[11px] font-bold opacity-60">No: ${kitap.okulNo}</p>
+                            </div>
                         </div>
-                        <div class="bg-white/50 p-3 rounded-xl border border-white/40">
-                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-0.5">📚 Okunan Kitap</p>
-                            <p class="text-sm font-bold text-slate-900">${kitap.kitapAdi}</p>
+
+                        <div class="bg-white/60 p-3 rounded-2xl border border-white/50 shadow-inner">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">📚 Kitap</p>
+                            <p class="text-xs font-bold text-slate-900 line-clamp-2">${icerikFiltrele(kitap.kitapAdi)}</p>
                         </div>
+
                         ${fotoHtml}
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-0.5">💭 Kitap Yorumu</p>
-                            <p class="text-sm italic font-medium">"${kitap.yorum}"</p>
+
+                        <div class="flex-grow">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">💭 Yorum</p>
+                            <p class="text-xs italic font-medium leading-relaxed text-slate-700">"${icerikFiltrele(kitap.yorum)}"</p>
                         </div>
                     `;
                     container.appendChild(card);
@@ -224,7 +255,7 @@
             })
             .catch(err => {
                 console.error(err);
-                container.innerHTML = `<div class="text-center py-8 text-red-400 font-medium bg-red-50 rounded-2xl border-2 border-red-200">Veriler yüklenirken küçük bir senkronizasyon hatası oluştu. Lütfen sayfayı yenile butonuna basın! 🛠️</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-red-400 font-medium bg-red-50 rounded-2xl border-2 border-red-200">Veriler yüklenirken bir senkronizasyon hatası oluştu. Yenile butonuna basabilirsiniz! 🛠️</div>`;
             });
         }
 
@@ -235,6 +266,11 @@
             e.preventDefault();
             if(secilenPuan === 0) { alert("Lütfen kitaba en az 1 yıldız vererek puanla! ⭐"); return; }
 
+            // Göndermeden önce tarayıcı tarafında da hızlı sansür kontrolü yapalım
+            const hamYorum = document.getElementById("yorum").value;
+            const hamKitap = document.getElementById("kitapAdi").value;
+            const hamAd = document.getElementById("adSoyad").value;
+
             const submitBtn = document.getElementById("submitBtn");
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Kitabın ve Fotoğrafın Kaydediliyor...';
@@ -244,12 +280,12 @@
 
             const sendData = (base64String = "") => {
                 const payload = {
-                    adSoyad: maskeAdSoyad(document.getElementById("adSoyad").value),
+                    adSoyad: maskeAdSoyad(hamAd),
                     okulNo: maskeOkulNo(document.getElementById("okulNo").value),
                     sinif: document.getElementById("sinif").value,
                     sube: document.getElementById("sube").value,
-                    kitapAdi: document.getElementById("kitapAdi").value,
-                    yorum: document.getElementById("yorum").value,
+                    kitapAdi: icerikFiltrele(hamKitap),
+                    yorum: icerikFiltrele(hamYorum),
                     puan: secilenPuan,
                     fotoBase64: base64String
                 };
