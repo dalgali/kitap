@@ -207,6 +207,11 @@
             return String(value ?? "").replace(/\D/g, "");
         }
 
+        function turkceBuyukYaz(value, fallback = "---") {
+            const metin = String(value ?? "").trim();
+            return metin ? metin.toLocaleUpperCase("tr-TR") : fallback;
+        }
+
         function basitHash(value) {
             let hash = 2166136261;
             for (let i = 0; i < value.length; i++) {
@@ -274,8 +279,8 @@
                 if (!anahtar || anahtar === "|") return;
 
                 const mevcut = tablo.get(anahtar) || {
-                    adSoyad: kitap.ogrenciGorunenAd || kitap.adSoyad || "---",
-                    okulNo: kitap.ogrenciGorunenNo || kitap.okulNo || "---",
+                    adSoyad: turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad),
+                    okulNo: turkceBuyukYaz(kitap.ogrenciGorunenNo || kitap.okulNo),
                     sinif: "",
                     sube: "",
                     kitapSayisi: 0,
@@ -290,7 +295,7 @@
                 mevcut.toplamPuan += kitapPuani;
                 mevcut.sonIndex = index;
                 mevcut.kitaplar.push({
-                    ad: alanOku(kitap, ["kitapAdi", "kitap", "Kitap Adı", "Okuduğun Kitabın Adı"]) || "Kitap adı yok",
+                    ad: turkceBuyukYaz(alanOku(kitap, ["kitapAdi", "kitap", "Kitap Adı", "Okuduğun Kitabın Adı"]), "KİTAP ADI YOK"),
                     puan: kitapPuani
                 });
 
@@ -505,14 +510,14 @@
                                 <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(kitap.ogrenciGorunenAd || kitap.adSoyad)}</h3>
-                                <p class="text-[11px] font-bold opacity-60">No: ${htmlKacir(kitap.ogrenciGorunenNo || kitap.okulNo)}</p>
+                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad))}</h3>
+                                <p class="text-[11px] font-bold opacity-60">No: ${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenNo || kitap.okulNo))}</p>
                             </div>
                         </div>
 
                         <div class="bg-white/60 p-3 rounded-2xl border border-white/50 shadow-inner">
                             <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Kitap</p>
-                            <p class="text-xs font-bold text-slate-900 line-clamp-2">${htmlKacir(kitap.kitapAdi)}</p>
+                            <p class="text-xs font-bold text-slate-900 line-clamp-2">${htmlKacir(turkceBuyukYaz(kitap.kitapAdi, "KİTAP ADI YOK"))}</p>
                         </div>
 
                         ${fotoHtml}
