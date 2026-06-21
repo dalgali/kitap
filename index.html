@@ -74,11 +74,11 @@
                     <label class="block text-sm font-bold text-indigo-600 mb-1">Kitaba Puanın Kaç?</label>
                     <div class="flex items-center space-x-3 mt-2 bg-purple-50 p-3 rounded-2xl w-fit border border-purple-100">
                         <div id="starContainer" class="flex text-3xl text-slate-300 cursor-pointer">
-                            <span class="star-btn select-none leading-none" data-value="1">★</span>
-                            <span class="star-btn ml-1 select-none leading-none" data-value="2">★</span>
-                            <span class="star-btn ml-1 select-none leading-none" data-value="3">★</span>
-                            <span class="star-btn ml-1 select-none leading-none" data-value="4">★</span>
-                            <span class="star-btn ml-1 select-none leading-none" data-value="5">★</span>
+                            <span class="star-btn select-none leading-none" data-value="1">☆</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="2">☆</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="3">☆</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="4">☆</span>
+                            <span class="star-btn ml-1 select-none leading-none" data-value="5">☆</span>
                         </div>
                         <span id="puanLabel" class="text-xs font-bold text-purple-600 bg-white px-3 py-1 rounded-full shadow-xs">(Seçmedin)</span>
                     </div>
@@ -242,7 +242,7 @@
                 };
 
                 mevcut.kitapSayisi += 1;
-                mevcut.toplamPuan += Math.max(0, Math.min(5, parseInt(kitap.puan) || 0));
+                mevcut.toplamPuan += Math.max(0, Math.min(5, parseFloat(kitap.puan) || 0));
                 mevcut.sonIndex = index;
 
                 const sinifSube = sinifSubeAnahtari(kitap);
@@ -316,17 +316,41 @@
         const stars = document.querySelectorAll(".star-btn");
         const puanLabel = document.getElementById("puanLabel");
         stars.forEach(star => {
-            star.addEventListener("click", () => { secilenPuan = parseInt(star.getAttribute("data-value")); guncelleYildizlar(secilenPuan); });
-            star.addEventListener("mouseover", () => { guncelleYildizlar(parseInt(star.getAttribute("data-value"))); });
+            star.addEventListener("click", (event) => {
+                secilenPuan = puanHesapla(event, star);
+                guncelleYildizlar(secilenPuan);
+            });
+            star.addEventListener("mousemove", (event) => { guncelleYildizlar(puanHesapla(event, star)); });
             star.addEventListener("mouseleave", () => { guncelleYildizlar(secilenPuan); });
         });
+
+        function puanHesapla(event, star) {
+            const val = parseInt(star.getAttribute("data-value"));
+            const rect = star.getBoundingClientRect();
+            const solYari = event.clientX - rect.left < rect.width / 2;
+            return Math.max(0.5, Math.min(5, val - (solYari ? 0.5 : 0)));
+        }
+
+        function puanYaz(puan) {
+            return Number(puan).toFixed(1).replace(".0", "").replace(".", ",");
+        }
+
         function guncelleYildizlar(puan) {
             stars.forEach(star => {
                 const val = parseInt(star.getAttribute("data-value"));
-                if(val <= puan) { star.classList.remove("text-slate-300"); star.classList.add("text-amber-400"); }
-                else { star.classList.remove("text-amber-400"); star.classList.add("text-slate-300"); }
+                star.classList.remove("text-amber-400", "text-slate-300");
+                if (val <= puan) {
+                    star.textContent = "★";
+                    star.classList.add("text-amber-400");
+                } else if (val - 0.5 <= puan) {
+                    star.textContent = "◐";
+                    star.classList.add("text-amber-400");
+                } else {
+                    star.textContent = "☆";
+                    star.classList.add("text-slate-300");
+                }
             });
-            puanLabel.textContent = puan > 0 ? `${puan} / 5 Yıldız` : "(Seçmedin)";
+            puanLabel.textContent = puan > 0 ? `${puanYaz(puan)} / 5 Yıldız` : "(Seçmedin)";
         }
 
         // Türkçe karakter güvenliği
@@ -373,9 +397,15 @@
                 data.forEach((kitap, index) => {
                     const secilenRenk = renkler[index % renkler.length];
                     let yildizlarHtml = "";
-                    const yıldızSayısı = Math.max(0, Math.min(5, parseInt(kitap.puan) || 0));
+                    const yıldızSayısı = Math.max(0, Math.min(5, parseFloat(kitap.puan) || 0));
                     for(let i=1; i<=5; i++) {
-                        yildizlarHtml += i <= yıldızSayısı ? '<span class="text-amber-500 text-base">★</span>' : '<span class="text-slate-300 text-base">☆</span>';
+                        if (i <= yıldızSayısı) {
+                            yildizlarHtml += '<span class="text-amber-500 text-base">★</span>';
+                        } else if (i - 0.5 <= yıldızSayısı) {
+                            yildizlarHtml += '<span class="text-amber-500 text-base">◐</span>';
+                        } else {
+                            yildizlarHtml += '<span class="text-slate-300 text-base">☆</span>';
+                        }
                     }
 
                     let fotoHtml = "";
@@ -428,7 +458,7 @@
 
         document.getElementById("readingForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            if(secilenPuan === 0) { alert("Lütfen kitaba en az 1 yıldız vererek puanla."); return; }
+            if(secilenPuan === 0) { alert("Lütfen kitaba en az yarım yıldız vererek puanla."); return; }
 
             const sonGonderim = Number(localStorage.getItem("kitapSonGonderim") || 0);
             if (Date.now() - sonGonderim < SUBMIT_COOLDOWN_MS) {
