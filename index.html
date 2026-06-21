@@ -268,7 +268,7 @@
         }
 
         function kayitPuani(kitap) {
-            return puanOku([kitap?.puanOndalik, kitap?.puanMetni, kitap?.puan]);
+            return puanOku([kitap?.puanOndalik, kitap?.puanNokta, kitap?.puanMetni, kitap?.puan]);
         }
 
         function liderlikVerisiOlustur(data) {
@@ -609,6 +609,7 @@
                     yorum: hamYorum,
                     puan: secilenPuan,
                     puanOndalik: secilenPuan,
+                    puanNokta: secilenPuan.toFixed(1),
                     puanMetni: puanYaz(secilenPuan),
                     fotoBase64: base64String
                 };
