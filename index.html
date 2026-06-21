@@ -93,6 +93,26 @@
                 </div>
 
                 <div>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Kitabı Anlatan En İyi Üç Kelime</label>
+                    <input type="text" id="ucKelime" required maxlength="60" placeholder="Örnek: sürükleyici, komik, heyecanlı" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Kitapta Beğendiğin En Güzel Alıntı Cümle</label>
+                    <textarea id="alintiCumle" required rows="2" maxlength="220" placeholder="Kitaptan aklında kalan güzel bir cümle..." class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-indigo-600 mb-1">Arkadaşlarına Önerir misin?</label>
+                    <select id="onerirMi" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
+                        <option value="">Seç..</option>
+                        <option value="Evet">Evet</option>
+                        <option value="Hayır">Hayır</option>
+                        <option value="Kararsızım">Kararsızım</option>
+                    </select>
+                </div>
+
+                <div>
                     <label class="block text-sm font-bold text-indigo-600 mb-1">Kitap Hakkında Ne Düşünüyorsun?</label>
                     <textarea id="yorum" required rows="3" maxlength="500" placeholder="Sence bu kitap nasıldı? En sevdiğin karakter kim oldu? Kısaca bahset..." class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition resize-none"></textarea>
                 </div>
@@ -417,6 +437,28 @@
                         </div>`;
                     }
 
+                    const ucKelime = kitap.ucKelime || kitap.kitabiAnlatanUcKelime || "";
+                    const alintiCumle = kitap.alintiCumle || kitap.alinti || "";
+                    const onerirMi = kitap.onerirMi || kitap.arkadaslaraOneri || "";
+
+                    const detayHtml = `
+                        ${ucKelime ? `
+                        <div class="bg-white/50 p-3 rounded-2xl border border-white/50">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Üç Kelime</p>
+                            <p class="text-xs font-bold text-slate-800">${htmlKacir(ucKelime)}</p>
+                        </div>` : ""}
+                        ${alintiCumle ? `
+                        <div class="bg-white/50 p-3 rounded-2xl border border-white/50">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Alıntı</p>
+                            <p class="text-xs italic font-medium leading-relaxed text-slate-700">"${htmlKacir(alintiCumle)}"</p>
+                        </div>` : ""}
+                        ${onerirMi ? `
+                        <div class="flex items-center justify-between bg-white/50 p-3 rounded-2xl border border-white/50">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Öneri</p>
+                            <p class="text-xs font-bold text-indigo-700">${htmlKacir(onerirMi)}</p>
+                        </div>` : ""}
+                    `;
+
                     const card = document.createElement("div");
                     card.className = `cool-card bg-gradient-to-br ${secilenRenk} border-2 rounded-3xl p-5 shadow-sm flex flex-col justify-between space-y-4`;
                     card.innerHTML = `
@@ -437,6 +479,8 @@
                         </div>
 
                         ${fotoHtml}
+
+                        ${detayHtml}
 
                         <div class="flex-grow">
                             <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-0.5">Yorum</p>
@@ -469,15 +513,22 @@
             const hamYorum = document.getElementById("yorum").value.trim();
             const hamKitap = document.getElementById("kitapAdi").value.trim();
             const hamAd = document.getElementById("adSoyad").value.trim();
+            const hamUcKelime = document.getElementById("ucKelime").value.trim();
+            const hamAlinti = document.getElementById("alintiCumle").value.trim();
+            const onerirMi = document.getElementById("onerirMi").value;
 
             await KitapModerasyon.hazirOl();
 
             const yorumKontrol = KitapModerasyon.icerikUygunMu(hamYorum);
             const kitapKontrol = KitapModerasyon.icerikUygunMu(hamKitap);
             const adKontrol = KitapModerasyon.icerikUygunMu(hamAd);
+            const ucKelimeKontrol = KitapModerasyon.icerikUygunMu(hamUcKelime);
+            const alintiKontrol = KitapModerasyon.icerikUygunMu(hamAlinti);
 
             if (!adKontrol.uygun) { alert(adKontrol.neden); return; }
             if (!kitapKontrol.uygun) { alert(kitapKontrol.neden); return; }
+            if (!ucKelimeKontrol.uygun) { alert(ucKelimeKontrol.neden); return; }
+            if (!alintiKontrol.uygun) { alert(alintiKontrol.neden); return; }
             if (!yorumKontrol.uygun) { alert(yorumKontrol.neden); return; }
 
             const fileInput = document.getElementById("fotoKanit");
@@ -507,6 +558,9 @@
                     sinif: document.getElementById("sinif").value,
                     sube: document.getElementById("sube").value,
                     kitapAdi: hamKitap,
+                    ucKelime: hamUcKelime,
+                    alintiCumle: hamAlinti,
+                    onerirMi: onerirMi,
                     yorum: hamYorum,
                     puan: secilenPuan,
                     fotoBase64: base64String
