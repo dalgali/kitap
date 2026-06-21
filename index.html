@@ -169,6 +169,7 @@
     <script src="js/profanity-filter.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
+        const PUBLIC_SCRIPT_URL = `${SCRIPT_URL}?view=public`;
         const MAX_FOTO_BYTES = 3 * 1024 * 1024;
         const SUBMIT_COOLDOWN_MS = 30000;
 
@@ -283,8 +284,8 @@
                 if (!anahtar || anahtar === "|") return;
 
                 const mevcut = tablo.get(anahtar) || {
-                    adSoyad: turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad),
-                    okulNo: turkceBuyukYaz(kitap.ogrenciGorunenNo || kitap.okulNo),
+                    adSoyad: kitap.okurEtiketi || turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"),
+                    okulNo: "",
                     sinif: "",
                     sube: "",
                     kitapSayisi: 0,
@@ -355,7 +356,6 @@
                         <span class="text-[11px] font-bold text-slate-500">${htmlKacir(ogrenci.sinif)}-${htmlKacir(ogrenci.sube)}</span>
                     </div>
                     <p class="text-sm font-bold text-slate-900 truncate">${htmlKacir(ogrenci.adSoyad)}</p>
-                    <p class="text-[11px] font-bold text-slate-500">No: ${htmlKacir(ogrenci.okulNo)}</p>
                     <div class="mt-3 flex items-center justify-between text-xs font-bold">
                         <span class="text-emerald-700">${ogrenci.kitapSayisi} kitap</span>
                         <span class="text-amber-600">${ogrenci.ortalamaPuan.toFixed(1)} ★</span>
@@ -466,7 +466,7 @@
             const container = document.getElementById("cardsContainer");
             container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-medium"><span class="animate-pulse text-3xl text-indigo-500 block mb-3">...</span>Kitaplar raflardan indiriliyor...</div>`;
             
-            fetch(SCRIPT_URL, { method: "GET", redirect: "follow" })
+            fetch(PUBLIC_SCRIPT_URL, { method: "GET", redirect: "follow" })
             .then(response => response.json())
             .then(data => {
                 container.innerHTML = ""; 
@@ -540,8 +540,7 @@
                                 <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad))}</h3>
-                                <p class="text-[11px] font-bold opacity-60">No: ${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenNo || kitap.okulNo))}</p>
+                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.okurEtiketi || kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"))}</h3>
                             </div>
                         </div>
 

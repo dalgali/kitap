@@ -6,11 +6,11 @@ Canlı adres: [https://dalgali.github.io/kitap/](https://dalgali.github.io/kitap
 
 ## Ne Yapar
 
-- Öğrenciler ad soyad, okul numarası, sınıf, şube, kitap adı ve puan girer.
+- Öğrenciler sınıf kodu, ad soyad, okul numarası, sınıf, şube, kitap adı ve puan girer.
 - Yarım yıldız desteği vardır.
 - İsteğe bağlı olarak üç kelime, alıntı cümlesi, öneri ve okuma kanıtı eklenebilir.
 - En çok okuyanlar sıralanır ve okudukları kitaplar listelenir.
-- Canlı akış kartlarında kitap bilgileri, yorum, puan ve ek alanlar gösterilir.
+- Canlı akış kartlarında kitap bilgileri, yorum, puan ve ek alanlar anonim etiketlerle gösterilir.
 - Türkçe büyük harf dönüşümü doğru çalışır.
 
 ## Tasarım Notu
@@ -59,6 +59,14 @@ Kayıtlar ise Google Sheet'e, Apps Script web app üzerinden yazılır.
   - `75EDRO`
   - bunların küçük/büyük harf varyasyonları
 
+### 5. Public / Admin Ayrımı
+
+- Public endpoint artık ham isim ve okul numarası döndürmez.
+- Öğrenciler `Okur #1`, `Okur #2` gibi anonim etiketler görür.
+- Tam listeyi görmek için Apps Script projesinde `ADMIN_VIEW_KEY` script property tanımlanır.
+- Admin görünümü `?view=admin&key=...` ile açılır.
+- Bu anahtar GitHub'da değil, Apps Script projesinde tutulmalıdır.
+
 ## Sheet Sütunları
 
 Apps Script kayıtları şu alanlarla saklar:
@@ -89,13 +97,12 @@ Apps Script kayıtları şu alanlarla saklar:
 
 ## Notlar
 
-- Ad soyad ve okul numarası, kartlarda maskeleme ile gösterilir.
+- Public görünümde ad soyad ve okul numarası gösterilmez.
+- Admin görünümünde tam kayıtlar açılabilir.
 - Canlı akış ve sıralama aynı veriden beslenir.
 - Yarım yıldız görünümü SVG ile çizilir, bu yüzden cihazdan cihaza değişmez.
 
 ## Lisans
 
-Bu proje şu anda MIT lisansı ile yayınlanıyor.
-Kaynak kodu kullanmak, değiştirmek ve dağıtmak serbesttir; lisans metnini koruman gerekir.
-
-Eğer ileride yeniden kullanımı daha sıkı sınırlamak istersen `LICENSE` dosyasını `All Rights Reserved` ya da farklı bir özel lisansla değiştirebilirsin.
+Bu proje `All Rights Reserved` olarak yayınlanıyor.
+Kaynak kodu, sahibinin yazılı izni olmaksızın kopyalanamaz, değiştirilemez, dağıtılamaz veya türev çalışmalarda kullanılamaz.

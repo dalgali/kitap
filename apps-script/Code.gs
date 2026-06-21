@@ -2,6 +2,7 @@ const SHEET_NAME = "Form Yanıtları 1";
 const DRIVE_FOLDER_ID = "";
 const SUBMIT_COOLDOWN_SECONDS = 20;
 const ALLOWED_CLASS_CODES = new Set(["75", "75EDRO"]);
+const ADMIN_VIEW_KEY_PROPERTY = "ADMIN_VIEW_KEY";
 
 const HEADERS = [
   "Zaman Damgası",
@@ -24,7 +25,7 @@ const ALLOWED_CLASSES = new Set(["5", "6", "7", "8"]);
 const ALLOWED_BRANCHES = new Set(["A", "B", "C", "Ç", "D", "E", "F", "G", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z"]);
 const ALLOWED_RECOMMENDATIONS = new Set(["Evet", "Hayır", "Kararsızım", ""]);
 
-function doGet() {
+function doGet(e) {
   const sheet = getSheet_();
   ensureHeaders_(sheet);
 
@@ -35,16 +36,51 @@ function doGet() {
 
   const headers = values[0].map(String);
   const rows = values.slice(1).filter(row => row.some(cell => cell !== ""));
+  const adminView = isAdminRequest_(e);
+  const records = rows.map(row => rowToObject_(headers, row));
 
-  const result = rows.map(row => {
-    const item = rowToObject_(headers, row);
+  if (adminView) {
+    return json_(records.map(item => {
+      const puan = normalizePuan_(item["Puan"]);
+      return {
+        zaman: stringifyDate_(item["Zaman Damgası"]),
+        adSoyad: safeText_(item["Ad Soyad"], 80),
+        okulNo: safeText_(item["Okul No"], 16),
+        sinifKodu: safeText_(item["Sınıf Kodu"], 12).toLocaleUpperCase("tr-TR"),
+        sinif: safeText_(item["Sınıf"], 2),
+        sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
+        kitapAdi: safeText_(item["Kitap Adı"], 90),
+        yorum: safeText_(item["Yorum"], 500),
+        puan: puan,
+        puanOndalik: puan,
+        puanNokta: puan.toFixed(1),
+        puanMetni: puan.toFixed(1).replace(".", ","),
+        fotoUrl: safeUrl_(item["Fotoğraf URL"]) || "Fotoğraf Yok",
+        ucKelime: safeText_(item["Üç Kelime"], 60),
+        kitabiAnlatanUcKelime: safeText_(item["Üç Kelime"], 60),
+        alintiCumle: safeText_(item["Alıntı"], 220),
+        alinti: safeText_(item["Alıntı"], 220),
+        onerirMi: safeText_(item["Öneri"], 20),
+        arkadaslaraOneri: safeText_(item["Öneri"], 20),
+        ogrenciAnahtari: safeText_(item["Öğrenci Anahtarı"], 128),
+        ogrenciGorunenAd: safeText_(item["Ad Soyad"], 80),
+        ogrenciGorunenNo: safeText_(item["Okul No"], 16)
+      };
+    }).reverse());
+  }
+
+  const labelMap = new Map();
+  let labelCount = 1;
+
+  const result = records.map(item => {
     const puan = normalizePuan_(item["Puan"]);
+    const ogrenciAnahtari = safeText_(item["Öğrenci Anahtarı"], 128);
+    if (ogrenciAnahtari && !labelMap.has(ogrenciAnahtari)) {
+      labelMap.set(ogrenciAnahtari, `Okur #${labelCount++}`);
+    }
 
     return {
       zaman: stringifyDate_(item["Zaman Damgası"]),
-      adSoyad: safeText_(item["Ad Soyad"], 80),
-      okulNo: safeText_(item["Okul No"], 16),
-      sinifKodu: safeText_(item["Sınıf Kodu"], 12).toLocaleUpperCase("tr-TR"),
       sinif: safeText_(item["Sınıf"], 2),
       sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
       kitapAdi: safeText_(item["Kitap Adı"], 90),
@@ -60,13 +96,12 @@ function doGet() {
       alinti: safeText_(item["Alıntı"], 220),
       onerirMi: safeText_(item["Öneri"], 20),
       arkadaslaraOneri: safeText_(item["Öneri"], 20),
-      ogrenciAnahtari: safeText_(item["Öğrenci Anahtarı"], 128),
-      ogrenciGorunenAd: safeText_(item["Ad Soyad"], 80),
-      ogrenciGorunenNo: safeText_(item["Okul No"], 16)
+      ogrenciAnahtari: ogrenciAnahtari,
+      okurEtiketi: labelMap.get(ogrenciAnahtari) || "Okur"
     };
-  });
+  }).reverse();
 
-  return json_(result.reverse());
+  return json_(result);
 }
 
 function doPost(e) {
@@ -195,6 +230,17 @@ function normalizePuan_(value) {
 
 function normalizeClassCode_(value) {
   return safeText_(value, 12).toLocaleUpperCase("tr-TR");
+}
+
+function isAdminRequest_(e) {
+  const key = PropertiesService.getScriptProperties().getProperty(ADMIN_VIEW_KEY_PROPERTY);
+  if (!key || !e || !e.parameter) {
+    return false;
+  }
+
+  const view = String(e.parameter.view || e.parameter.mode || "").toLocaleLowerCase("tr-TR");
+  const providedKey = String(e.parameter.key || e.parameter.adminKey || "").trim();
+  return (view === "admin" || view === "private") && providedKey === key;
 }
 
 function safeText_(value, maxLength) {
