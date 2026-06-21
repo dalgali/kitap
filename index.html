@@ -44,6 +44,10 @@
                         <label class="block text-sm font-bold text-indigo-600 mb-1">Okul Numaran</label>
                         <input type="number" id="okulNo" required min="1" max="99999" placeholder="Örnek: 1985" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
+                    <div>
+                        <label class="block text-sm font-bold text-indigo-600 mb-1">Sınıf Kodu</label>
+                        <input type="text" id="sinifKodu" required maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="Sınıf kodunu yaz" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -555,6 +559,7 @@
             const hamYorum = document.getElementById("yorum").value.trim();
             const hamKitap = document.getElementById("kitapAdi").value.trim();
             const hamAd = document.getElementById("adSoyad").value.trim();
+            const hamSinifKodu = document.getElementById("sinifKodu").value.trim();
             const hamUcKelime = document.getElementById("ucKelime").value.trim();
             const hamAlinti = document.getElementById("alintiCumle").value.trim();
             const onerirMi = document.getElementById("onerirMi").value;
@@ -564,11 +569,13 @@
             const yorumKontrol = KitapModerasyon.icerikUygunMu(hamYorum);
             const kitapKontrol = KitapModerasyon.icerikUygunMu(hamKitap);
             const adKontrol = KitapModerasyon.icerikUygunMu(hamAd);
+            const sinifKoduKontrol = KitapModerasyon.icerikUygunMu(hamSinifKodu);
             const ucKelimeKontrol = KitapModerasyon.icerikUygunMu(hamUcKelime);
             const alintiKontrol = KitapModerasyon.icerikUygunMu(hamAlinti);
 
             if (!adKontrol.uygun) { alert(adKontrol.neden); return; }
             if (!kitapKontrol.uygun) { alert(kitapKontrol.neden); return; }
+            if (!sinifKoduKontrol.uygun) { alert(sinifKoduKontrol.neden); return; }
             if (!ucKelimeKontrol.uygun) { alert(ucKelimeKontrol.neden); return; }
             if (!alintiKontrol.uygun) { alert(alintiKontrol.neden); return; }
             if (!yorumKontrol.uygun) { alert(yorumKontrol.neden); return; }
@@ -597,6 +604,7 @@
                     ogrenciGorunenNo: maskeOkulNo(document.getElementById("okulNo").value),
                     adSoyad: maskeAdSoyad(hamAd),
                     okulNo: maskeOkulNo(document.getElementById("okulNo").value),
+                    sinifKodu: hamSinifKodu,
                     sinif: document.getElementById("sinif").value,
                     sube: document.getElementById("sube").value,
                     kitapAdi: hamKitap,

@@ -1,6 +1,7 @@
 const SHEET_NAME = "Form Yanıtları 1";
 const DRIVE_FOLDER_ID = "";
 const SUBMIT_COOLDOWN_SECONDS = 20;
+const CLASS_CODE = "75EDO";
 
 const HEADERS = [
   "Zaman Damgası",
@@ -141,6 +142,7 @@ function validatePayload_(payload) {
   const okulNo = safeText_(payload.okulNo || payload.ogrenciGorunenNo, 16);
   const sinif = safeText_(payload.sinif, 2);
   const sube = safeText_(payload.sube, 2).toLocaleUpperCase("tr-TR");
+  const sinifKodu = normalizeClassCode_(payload.sinifKodu);
   const kitapAdi = safeText_(payload.kitapAdi, 90);
   const yorum = safeText_(payload.yorum, 500);
   const puan = normalizePuan_(payload.puanOndalik || payload.puanNokta || payload.puanMetni || payload.puan);
@@ -149,8 +151,11 @@ function validatePayload_(payload) {
   const onerirMi = safeText_(payload.onerirMi || payload.arkadaslaraOneri, 20);
   const ogrenciAnahtari = safeText_(payload.ogrenciAnahtari, 128);
 
-  if (!adSoyad || !okulNo || !sinif || !sube || !kitapAdi || !yorum) {
+  if (!adSoyad || !okulNo || !sinifKodu || !sinif || !sube || !kitapAdi || !yorum) {
     throw new Error("Zorunlu alanlar eksik.");
+  }
+  if (sinifKodu !== CLASS_CODE) {
+    throw new Error("Sınıf kodu yanlış.");
   }
   if (!ALLOWED_CLASSES.has(sinif)) {
     throw new Error("Sınıf bilgisi geçersiz.");
@@ -165,7 +170,7 @@ function validatePayload_(payload) {
     throw new Error("Puan yarım yıldız aralıklarıyla 0,5 ile 5 arasında olmalı.");
   }
 
-  return { adSoyad, okulNo, sinif, sube, kitapAdi, yorum, puan, ucKelime, alintiCumle, onerirMi, ogrenciAnahtari };
+  return { adSoyad, okulNo, sinif, sube, kitapAdi, yorum, puan, ucKelime, alintiCumle, onerirMi, ogrenciAnahtari, sinifKodu };
 }
 
 function enforceCooldown_(key) {
@@ -183,6 +188,10 @@ function normalizePuan_(value) {
     return 0;
   }
   return Math.max(0, Math.min(5, Math.round(number * 2) / 2));
+}
+
+function normalizeClassCode_(value) {
+  return safeText_(value, 12).toLocaleUpperCase("tr-TR");
 }
 
 function safeText_(value, maxLength) {
