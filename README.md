@@ -53,11 +53,11 @@ Kayıtlar ise Google Sheet'e, Apps Script web app üzerinden yazılır.
 ### 4. Sınıf Kodu
 
 - Formda `Sınıf Kodu` alanı vardır.
-- Kod HTML içinde görünmez; doğrulama Apps Script tarafındadır.
-- Şu değerler kabul edilir:
-  - `75`
-  - `75EDRO`
-  - bunların küçük/büyük harf varyasyonları
+- Kod HTML içinde ve GitHub'daki kaynak dosyalarda yazmaz.
+- Doğrulama Apps Script tarafındadır.
+- Apps Script `Project Settings > Script properties` bölümünde `CLASS_CODES` property değeri virgülle ayrılmış olarak tanımlanır.
+- Küçük/büyük harf farkı yoktur.
+- Form yalnızca 5. sınıf, 6. sınıf ve D/G/H şubeleri için açıktır.
 
 ### 5. Public / Admin Ayrımı
 

@@ -46,7 +46,7 @@
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-sm font-bold text-indigo-600 mb-1">Sınıf Kodu</label>
-                        <input type="text" id="sinifKodu" required maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="75 veya 75EDRO" class="w-full h-14 px-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
+                        <input type="text" id="sinifKodu" required maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="Öğretmeninden aldığın kod" class="w-full h-14 px-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm transition">
                     </div>
                 </div>
 
@@ -57,8 +57,6 @@
                             <option value="">Seç..</option>
                             <option value="5">5. Sınıf</option>
                             <option value="6">6. Sınıf</option>
-                            <option value="7">7. Sınıf</option>
-                            <option value="8">8. Sınıf</option>
                         </select>
                     </div>
                     <div>
@@ -100,7 +98,7 @@
 
                 <div>
                     <label class="block text-sm font-bold text-indigo-600 mb-1">Arkadaşlarına Önerir misin?</label>
-                    <select id="onerirMi" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
+                    <select id="onerirMi" required class="w-full h-14 px-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500 font-medium text-sm bg-white transition">
                         <option value="">Seç..</option>
                         <option value="Evet">Evet</option>
                         <option value="Hayır">Hayır</option>
@@ -353,7 +351,7 @@
             `).join("");
         }
 
-        const subeler = ["A","B","C","Ç","D","E","F","G","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z"];
+        const subeler = ["D", "G", "H"];
         const subeSelect = document.getElementById("sube");
         subeler.forEach(s => {
             let opt = document.createElement("option"); opt.value = s; opt.textContent = s + " Şubesi"; subeSelect.appendChild(opt);

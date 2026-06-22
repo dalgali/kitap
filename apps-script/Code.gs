@@ -1,6 +1,6 @@
 const SHEET_NAME = "Form Yanıtları 1";
 const SUBMIT_COOLDOWN_SECONDS = 20;
-const ALLOWED_CLASS_CODES = new Set(["75", "75EDRO"]);
+const CLASS_CODES_PROPERTY = "CLASS_CODES";
 const ADMIN_VIEW_KEY_PROPERTY = "ADMIN_VIEW_KEY";
 const DEPRECATED_HEADERS = ["Fotoğraf URL"];
 
@@ -20,8 +20,8 @@ const HEADERS = [
   "Sınıf Kodu"
 ];
 
-const ALLOWED_CLASSES = new Set(["5", "6", "7", "8"]);
-const ALLOWED_BRANCHES = new Set(["A", "B", "C", "Ç", "D", "E", "F", "G", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z"]);
+const ALLOWED_CLASSES = new Set(["5", "6"]);
+const ALLOWED_BRANCHES = new Set(["D", "G", "H"]);
 const ALLOWED_RECOMMENDATIONS = new Set(["Evet", "Hayır", "Kararsızım", ""]);
 
 function doGet(e) {
@@ -204,7 +204,8 @@ function validatePayload_(payload) {
   if (!adSoyad || !okulNo || !sinifKodu || !sinif || !sube || !kitapAdi || !yorum) {
     throw new Error("Zorunlu alanlar eksik.");
   }
-  if (!ALLOWED_CLASS_CODES.has(sinifKodu)) {
+  const allowedClassCodes = getAllowedClassCodes_();
+  if (!allowedClassCodes.size || !allowedClassCodes.has(sinifKodu)) {
     throw new Error("Sınıf kodu yanlış.");
   }
   if (!ALLOWED_CLASSES.has(sinif)) {
@@ -242,6 +243,16 @@ function normalizePuan_(value) {
 
 function normalizeClassCode_(value) {
   return safeText_(value, 12).toLocaleUpperCase("tr-TR");
+}
+
+function getAllowedClassCodes_() {
+  const rawCodes = PropertiesService.getScriptProperties().getProperty(CLASS_CODES_PROPERTY) || "";
+  const codes = rawCodes
+    .split(",")
+    .map(code => normalizeClassCode_(code))
+    .filter(Boolean);
+
+  return new Set(codes);
 }
 
 function publicReaderKey_(item) {
