@@ -1,8 +1,8 @@
 const SHEET_NAME = "Form Yanıtları 1";
-const DRIVE_FOLDER_ID = "";
 const SUBMIT_COOLDOWN_SECONDS = 20;
 const ALLOWED_CLASS_CODES = new Set(["75", "75EDRO"]);
 const ADMIN_VIEW_KEY_PROPERTY = "ADMIN_VIEW_KEY";
+const DEPRECATED_HEADERS = ["Fotoğraf URL"];
 
 const HEADERS = [
   "Zaman Damgası",
@@ -13,7 +13,6 @@ const HEADERS = [
   "Kitap Adı",
   "Yorum",
   "Puan",
-  "Fotoğraf URL",
   "Üç Kelime",
   "Alıntı",
   "Öneri",
@@ -55,7 +54,6 @@ function doGet(e) {
         puanOndalik: puan,
         puanNokta: puan.toFixed(1),
         puanMetni: puan.toFixed(1).replace(".", ","),
-        fotoUrl: safeUrl_(item["Fotoğraf URL"]) || "Fotoğraf Yok",
         ucKelime: safeText_(item["Üç Kelime"], 60),
         kitabiAnlatanUcKelime: safeText_(item["Üç Kelime"], 60),
         alintiCumle: safeText_(item["Alıntı"], 220),
@@ -95,7 +93,6 @@ function doGet(e) {
       puanOndalik: puan,
       puanNokta: puan.toFixed(1),
       puanMetni: puan.toFixed(1).replace(".", ","),
-      fotoUrl: safeUrl_(item["Fotoğraf URL"]) || "Fotoğraf Yok",
       ucKelime: safeText_(item["Üç Kelime"], 60),
       kitabiAnlatanUcKelime: safeText_(item["Üç Kelime"], 60),
       alintiCumle: safeText_(item["Alıntı"], 220),
@@ -129,7 +126,6 @@ function doPost(e) {
       record.kitapAdi,
       record.yorum,
       record.puan,
-      uploadPhoto_(payload.fotoBase64),
       record.ucKelime,
       record.alintiCumle,
       record.onerirMi,
@@ -151,6 +147,8 @@ function getSheet_() {
 }
 
 function ensureHeaders_(sheet) {
+  removeDeprecatedHeaders_(sheet);
+
   const lastColumn = Math.max(sheet.getLastColumn(), 1);
   const current = sheet.getRange(1, 1, 1, lastColumn).getValues()[0].map(String);
 
@@ -162,6 +160,20 @@ function ensureHeaders_(sheet) {
   const missing = HEADERS.filter(header => !current.includes(header));
   if (missing.length > 0) {
     sheet.getRange(1, current.length + 1, 1, missing.length).setValues([missing]);
+  }
+}
+
+function removeDeprecatedHeaders_(sheet) {
+  const lastColumn = sheet.getLastColumn();
+  if (lastColumn < 1) {
+    return;
+  }
+
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0].map(String);
+  for (let index = headers.length - 1; index >= 0; index--) {
+    if (DEPRECATED_HEADERS.includes(headers[index])) {
+      sheet.deleteColumn(index + 1);
+    }
   }
 }
 
@@ -267,30 +279,6 @@ function safeText_(value, maxLength) {
     .replace(/[\u0000-\u001F\u007F]/g, "")
     .replace(/^[=+\-@]/, "'$&")
     .slice(0, maxLength);
-}
-
-function safeUrl_(value) {
-  const url = safeText_(value, 500);
-  return /^https?:\/\//i.test(url) ? url : "";
-}
-
-function uploadPhoto_(base64) {
-  if (!base64) {
-    return "Fotoğraf Yok";
-  }
-  if (!DRIVE_FOLDER_ID) {
-    return "Fotoğraf Yok";
-  }
-
-  const parts = String(base64).match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
-  if (!parts) {
-    return "Fotoğraf Yok";
-  }
-
-  const blob = Utilities.newBlob(Utilities.base64Decode(parts[2]), parts[1], `kitap-${Date.now()}`);
-  const file = DriveApp.getFolderById(DRIVE_FOLDER_ID).createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  return file.getUrl();
 }
 
 function stringifyDate_(value) {

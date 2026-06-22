@@ -8,7 +8,7 @@ Canlı adres: [https://dalgali.github.io/kitap/](https://dalgali.github.io/kitap
 
 - Öğrenciler sınıf kodu, ad soyad, okul numarası, sınıf, şube, kitap adı ve puan girer.
 - Yarım yıldız desteği vardır.
-- İsteğe bağlı olarak üç kelime, alıntı cümlesi, öneri ve okuma kanıtı eklenebilir.
+- İsteğe bağlı olarak üç kelime, alıntı cümlesi ve öneri eklenebilir.
 - En çok okuyanlar sıralanır ve okudukları kitaplar listelenir.
 - Canlı akış kartlarında kitap bilgileri, yorum, puan ve ek alanlar anonim etiketlerle gösterilir.
 - Türkçe büyük harf dönüşümü doğru çalışır.
@@ -80,7 +80,6 @@ Apps Script kayıtları şu alanlarla saklar:
 - Kitap Adı
 - Yorum
 - Puan
-- Fotoğraf URL
 - Üç Kelime
 - Alıntı
 - Öneri
