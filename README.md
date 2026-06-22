@@ -62,8 +62,8 @@ Kayıtlar ise Google Sheet'e, Apps Script web app üzerinden yazılır.
 ### 5. Public / Admin Ayrımı
 
 - Public endpoint artık ham isim ve okul numarası döndürmez.
-- Öğrenci adı ve okul numarası public görünümde yer almaz.
-- Public JSON'da `adSoyad`, `okulNo`, `ogrenciGorunenAd`, `ogrenciGorunenNo`, `ogrenciAnahtari`, `sinifKodu` ve ham zaman bilgisi dönmez.
+- Öğrenciler maskelenmiş ad soyadı görür; okul numarası public görünümde yer almaz.
+- Public JSON'da `adSoyad`, `okulNo`, `ogrenciAnahtari`, `ogrenciGorunenNo`, `sinifKodu` ve ham zaman bilgisi dönmez.
 - Tam listeyi görmek için Apps Script projesinde `ADMIN_VIEW_KEY` script property tanımlanır.
 - Admin görünümü `?view=admin&key=...` ile açılır.
 - Bu anahtar GitHub'da değil, Apps Script projesinde tutulmalıdır.
