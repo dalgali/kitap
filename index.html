@@ -280,7 +280,7 @@
             const tablo = new Map();
 
             data.forEach((kitap, index) => {
-                const anahtar = kitap.ogrenciAnahtari || kitap.ogrenciKey || ogrenciYedekAnahtari(kitap);
+                const anahtar = kitap.publicOkurId || kitap.ogrenciAnahtari || kitap.ogrenciKey || ogrenciYedekAnahtari(kitap);
                 if (!anahtar || anahtar === "|") return;
 
                 const mevcut = tablo.get(anahtar) || {

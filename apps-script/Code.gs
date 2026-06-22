@@ -74,13 +74,19 @@ function doGet(e) {
 
   const result = records.map(item => {
     const puan = normalizePuan_(item["Puan"]);
-    const ogrenciAnahtari = safeText_(item["Öğrenci Anahtarı"], 128);
-    if (ogrenciAnahtari && !labelMap.has(ogrenciAnahtari)) {
-      labelMap.set(ogrenciAnahtari, `Okur #${labelCount++}`);
+    const privateKey = publicReaderKey_(item);
+    if (!labelMap.has(privateKey)) {
+      const number = labelCount++;
+      labelMap.set(privateKey, {
+        id: `okur-${number}`,
+        label: `Okur #${number}`
+      });
     }
+    const publicReader = labelMap.get(privateKey);
 
     return {
-      zaman: stringifyDate_(item["Zaman Damgası"]),
+      publicOkurId: publicReader.id,
+      okurEtiketi: publicReader.label,
       sinif: safeText_(item["Sınıf"], 2),
       sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
       kitapAdi: safeText_(item["Kitap Adı"], 90),
@@ -95,9 +101,7 @@ function doGet(e) {
       alintiCumle: safeText_(item["Alıntı"], 220),
       alinti: safeText_(item["Alıntı"], 220),
       onerirMi: safeText_(item["Öneri"], 20),
-      arkadaslaraOneri: safeText_(item["Öneri"], 20),
-      ogrenciAnahtari: ogrenciAnahtari,
-      okurEtiketi: labelMap.get(ogrenciAnahtari) || "Okur"
+      arkadaslaraOneri: safeText_(item["Öneri"], 20)
     };
   }).reverse();
 
@@ -230,6 +234,20 @@ function normalizePuan_(value) {
 
 function normalizeClassCode_(value) {
   return safeText_(value, 12).toLocaleUpperCase("tr-TR");
+}
+
+function publicReaderKey_(item) {
+  const storedKey = safeText_(item["Öğrenci Anahtarı"], 128);
+  if (storedKey) {
+    return storedKey;
+  }
+
+  return [
+    safeText_(item["Ad Soyad"], 80),
+    safeText_(item["Okul No"], 16),
+    safeText_(item["Sınıf"], 2),
+    safeText_(item["Şube"], 2)
+  ].join("|") || `legacy-${Utilities.getUuid()}`;
 }
 
 function isAdminRequest_(e) {
