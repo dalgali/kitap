@@ -265,7 +265,7 @@
                 if (!anahtar || anahtar === "|") return;
 
                 const mevcut = tablo.get(anahtar) || {
-                    adSoyad: kitap.okurEtiketi || turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"),
+                    adSoyad: turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"),
                     okulNo: "",
                     sinif: "",
                     sube: "",
@@ -517,7 +517,7 @@
                                 <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.okurEtiketi || kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"))}</h3>
+                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"))}</h3>
                             </div>
                         </div>
 

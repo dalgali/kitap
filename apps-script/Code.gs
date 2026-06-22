@@ -75,16 +75,12 @@ function doGet(e) {
     const privateKey = publicReaderKey_(item);
     if (!labelMap.has(privateKey)) {
       const number = labelCount++;
-      labelMap.set(privateKey, {
-        id: `okur-${number}`,
-        label: `Okur #${number}`
-      });
+      labelMap.set(privateKey, `okur-${number}`);
     }
-    const publicReader = labelMap.get(privateKey);
 
     return {
-      publicOkurId: publicReader.id,
-      okurEtiketi: publicReader.label,
+      publicOkurId: labelMap.get(privateKey),
+      ogrenciGorunenAd: safeText_(item["Ad Soyad"], 80),
       sinif: safeText_(item["Sınıf"], 2),
       sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
       kitapAdi: safeText_(item["Kitap Adı"], 90),
