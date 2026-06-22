@@ -161,6 +161,10 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDVN2VTtqhggKGtAb5VWVDGfkDp7pSZMc5AYtHcJRmtya3p3IIcwiBI9AVzfThOK9cqg/exec";
         const PUBLIC_SCRIPT_URL = `${SCRIPT_URL}?view=public`;
         const SUBMIT_COOLDOWN_MS = 30000;
+        const SINIF_KODU_HASHLERI = new Set([
+            "f369cb89fc627e668987007d121ed1eacdc01db9e28f8bb26f358b7d8c4f08ac",
+            "dca3b8532386fc1e211ec714ec94abda9b336446541dfbc13e6133fff4f97cc5"
+        ]);
 
         function htmlKacir(value) {
             return String(value ?? "")
@@ -196,6 +200,30 @@
             return metin ? metin.toLocaleUpperCase("tr-TR") : fallback;
         }
 
+        function normalSinifKodu(value) {
+            return String(value ?? "").trim().toLocaleUpperCase("tr-TR");
+        }
+
+        async function sha256Hex(value) {
+            if (!window.crypto?.subtle) return "";
+            const bytes = new TextEncoder().encode(value);
+            const digest = await crypto.subtle.digest("SHA-256", bytes);
+            return Array.from(new Uint8Array(digest))
+                .map((byte) => byte.toString(16).padStart(2, "0"))
+                .join("");
+        }
+
+        async function sinifKoduGecerliMi(value) {
+            const kod = normalSinifKodu(value);
+            if (!kod) return false;
+            const hash = await sha256Hex(kod);
+            return SINIF_KODU_HASHLERI.has(hash);
+        }
+
+        function gorunenOgrenciAdi(kitap) {
+            return String(kitap?.ogrenciGorunenAd || kitap?.adSoyad || "").trim();
+        }
+
         function basitHash(value) {
             let hash = 2166136261;
             for (let i = 0; i < value.length; i++) {
@@ -210,11 +238,7 @@
             if (!hamAnahtar || hamAnahtar === "|") return "";
 
             if (window.crypto?.subtle) {
-                const bytes = new TextEncoder().encode(hamAnahtar);
-                const digest = await crypto.subtle.digest("SHA-256", bytes);
-                return Array.from(new Uint8Array(digest))
-                    .map((byte) => byte.toString(16).padStart(2, "0"))
-                    .join("");
+                return sha256Hex(hamAnahtar);
             }
 
             return basitHash(hamAnahtar);
@@ -261,9 +285,11 @@
             data.forEach((kitap, index) => {
                 const anahtar = kitap.publicOkurId || kitap.ogrenciAnahtari || kitap.ogrenciKey || ogrenciYedekAnahtari(kitap);
                 if (!anahtar || anahtar === "|") return;
+                const gorunenAd = gorunenOgrenciAdi(kitap);
+                if (!gorunenAd) return;
 
                 const mevcut = tablo.get(anahtar) || {
-                    adSoyad: turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"),
+                    adSoyad: turkceBuyukYaz(gorunenAd, ""),
                     okulNo: "",
                     sinif: "",
                     sube: "",
@@ -470,7 +496,14 @@
                     'from-amber-100 to-yellow-100 border-amber-200 text-amber-950'
                 ];
 
-                data.forEach((kitap, index) => {
+                const gorunurData = data.filter(kitap => gorunenOgrenciAdi(kitap));
+                if (gorunurData.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center py-10 text-slate-400 font-medium">Henüz paylaşım görünmüyor.</div>`;
+                    return;
+                }
+
+                gorunurData.forEach((kitap, index) => {
+                    const ogrenciAdi = gorunenOgrenciAdi(kitap);
                     const secilenRenk = renkler[index % renkler.length];
                     let yildizlarHtml = "";
                     const yıldızSayısı = kayitPuani(kitap);
@@ -515,7 +548,7 @@
                                 <div class="flex bg-white/70 px-2 py-1 rounded-xl shadow-xs border border-white/40">${yildizlarHtml}</div>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(kitap.ogrenciGorunenAd || kitap.adSoyad, "OKUR"))}</h3>
+                                <h3 class="text-sm font-bold tracking-tight">${htmlKacir(turkceBuyukYaz(ogrenciAdi, ""))}</h3>
                             </div>
                         </div>
 
@@ -557,10 +590,15 @@
             const hamYorum = document.getElementById("yorum").value.trim();
             const hamKitap = document.getElementById("kitapAdi").value.trim();
             const hamAd = document.getElementById("adSoyad").value.trim();
-            const hamSinifKodu = document.getElementById("sinifKodu").value.trim();
+            const hamSinifKodu = normalSinifKodu(document.getElementById("sinifKodu").value);
             const hamUcKelime = document.getElementById("ucKelime").value.trim();
             const hamAlinti = document.getElementById("alintiCumle").value.trim();
             const onerirMi = document.getElementById("onerirMi").value;
+
+            if (!(await sinifKoduGecerliMi(hamSinifKodu))) {
+                alert("Sınıf kodu yanlış. Lütfen öğretmeninden aldığın kodu yaz.");
+                return;
+            }
 
             await KitapModerasyon.hazirOl();
 

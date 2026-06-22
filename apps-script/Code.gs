@@ -80,7 +80,7 @@ function doGet(e) {
 
     return {
       publicOkurId: labelMap.get(privateKey),
-      ogrenciGorunenAd: safeText_(item["Ad Soyad"], 80),
+      ogrenciGorunenAd: maskName_(item["Ad Soyad"]),
       sinif: safeText_(item["Sınıf"], 2),
       sube: safeText_(item["Şube"], 2).toLocaleUpperCase("tr-TR"),
       kitapAdi: safeText_(item["Kitap Adı"], 90),
@@ -286,6 +286,14 @@ function safeText_(value, maxLength) {
     .replace(/[\u0000-\u001F\u007F]/g, "")
     .replace(/^[=+\-@]/, "'$&")
     .slice(0, maxLength);
+}
+
+function maskName_(value) {
+  return safeText_(value, 80)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(part => `${part.charAt(0).toLocaleUpperCase("tr-TR")}***`)
+    .join(" ");
 }
 
 function stringifyDate_(value) {
